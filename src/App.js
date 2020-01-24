@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Sketch from 'react-p5'
 
+import CodeEditor from "./Ace/CodeEditor";
 
 function App() {
     const setup = (p5, canvasParent) => {
@@ -13,7 +14,8 @@ function App() {
     };
   return (
       <React.Fragment>
-          <Sketch setup ={setup} draw = {draw}/>
+          {/*<Sketch setup ={setup} draw = {draw}/>*/}
+          <CodeEditor placeholder={"Enter your code here"}/>
       </React.Fragment>
   );
 }
