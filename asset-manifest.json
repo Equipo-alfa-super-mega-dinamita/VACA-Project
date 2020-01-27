@@ -1,21 +1,21 @@
 {
   "files": {
     "main.css": "/VACA-Project/static/css/main.b100e6da.chunk.css",
-    "main.js": "/VACA-Project/static/js/main.9fafda5f.chunk.js",
-    "main.js.map": "/VACA-Project/static/js/main.9fafda5f.chunk.js.map",
-    "runtime-main.js": "/VACA-Project/static/js/runtime-main.bc941bdc.js",
-    "runtime-main.js.map": "/VACA-Project/static/js/runtime-main.bc941bdc.js.map",
-    "static/js/2.7663e32c.chunk.js": "/VACA-Project/static/js/2.7663e32c.chunk.js",
-    "static/js/2.7663e32c.chunk.js.map": "/VACA-Project/static/js/2.7663e32c.chunk.js.map",
+    "main.js": "/VACA-Project/static/js/main.2477e955.chunk.js",
+    "main.js.map": "/VACA-Project/static/js/main.2477e955.chunk.js.map",
+    "runtime-main.js": "/VACA-Project/static/js/runtime-main.572d41b7.js",
+    "runtime-main.js.map": "/VACA-Project/static/js/runtime-main.572d41b7.js.map",
+    "static/js/2.5b917466.chunk.js": "/VACA-Project/static/js/2.5b917466.chunk.js",
+    "static/js/2.5b917466.chunk.js.map": "/VACA-Project/static/js/2.5b917466.chunk.js.map",
     "index.html": "/VACA-Project/index.html",
-    "precache-manifest.7e2456f926e31e81bb9927b94b61f8b6.js": "/VACA-Project/precache-manifest.7e2456f926e31e81bb9927b94b61f8b6.js",
+    "precache-manifest.1cc12354ca2034d4bda68d5d0cb59a17.js": "/VACA-Project/precache-manifest.1cc12354ca2034d4bda68d5d0cb59a17.js",
     "service-worker.js": "/VACA-Project/service-worker.js",
     "static/css/main.b100e6da.chunk.css.map": "/VACA-Project/static/css/main.b100e6da.chunk.css.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.bc941bdc.js",
-    "static/js/2.7663e32c.chunk.js",
+    "static/js/runtime-main.572d41b7.js",
+    "static/js/2.5b917466.chunk.js",
     "static/css/main.b100e6da.chunk.css",
-    "static/js/main.9fafda5f.chunk.js"
+    "static/js/main.2477e955.chunk.js"
   ]
 }
