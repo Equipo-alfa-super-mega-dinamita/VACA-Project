@@ -6,5 +6,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="p5.sound" level="project" />
   </component>
 </module>
