@@ -1,4 +1,4 @@
-// Generated from C:/Users/Nicolai/Documents/GitHub/VACA-Project/vaca/grammar\asm8086.g4 by ANTLR 4.7.2
+// Generated from /home/julian/VACA-Project/grammar/asm8086.g4 by ANTLR 4.7.2
 // jshint ignore: start
 var antlr4 = require('antlr4/index');
 
