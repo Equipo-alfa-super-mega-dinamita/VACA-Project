@@ -2,11 +2,11 @@ import React from 'react';
 import asm8086Lexer from "../../out/asm8086Lexer"
 import asm8086Parser from "../../out/asm8086Parser"
 import antlr4 from 'antlr4';
+import AnnotatingErrorListener from "../../Ace/AnnotatingErrorListener";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-assembly_x86";
-//import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/theme-monokai";
-import MyVisitor from '../../Interpreter/MyVisitor';
+import CodeBuilderVisitor from '../../Interpreter/CodeBuilderVisitor';
 
 class InputView extends React.Component{
 
@@ -24,24 +24,54 @@ class InputView extends React.Component{
 
     constructor(props){
         super(props);
-        this.state = {codeString : ""};
-        this.parse = this.parse.bind(this)
+        this.state = {
+            codeString : this.initialValue,
+            annotations : [{row: 1, column:1,type:'error',text:'Puto el que lo lea'}],
+            validCode:false,
+            aceState:null
+        };
+        this.parse = this.parse.bind(this);
+        this.validate = this.validate.bind(this);
+    }
+
+    componentDidUpdate(prevProps) {
+        console.log(this.state);
     }
 
     parse = () =>{
+        var newState = {...this.state};
+
         const editor = this.refs.reactAceComponent.editor;
-        let codeString = editor.getValue()+'\n';
-        var chars = new antlr4.InputStream(codeString);
+        var codeStr = editor.getValue();
+        newState.codeString = codeStr;
+        newState.annotations = [];
+
+        console.log(this.state.codeString);
+
+        var chars = new antlr4.InputStream(codeStr+'\n');
         var lexer = new asm8086Lexer.asm8086Lexer(chars);
         var tokens  = new antlr4.CommonTokenStream(lexer);
         var parser = new asm8086Parser.asm8086Parser(tokens);
+
+        var listener = new AnnotatingErrorListener(newState.annotations);
+        parser.addErrorListener(listener);
         parser.buildParseTrees = true;
         var tree = parser.prog();
-        console.log(tree.toStringTree(parser.ruleNames));
 
         //Interpretado del código
-        var myVisitor = new MyVisitor();
-        myVisitor.start(tree)
+        try {
+            var codeBuilderVisitor = new CodeBuilderVisitor();
+            codeBuilderVisitor.start(tree)
+        }catch(error){
+            console.error(error);
+            return;
+        }
+
+        this.setState(newState);
+    };
+
+    validate = () =>{
+
     };
 
     render() {
@@ -49,7 +79,7 @@ class InputView extends React.Component{
             <React.Fragment>
 
                 <AceEditor
-                    defaultValue={this.initialValue}
+                    value={this.state.codeString}
                     ref="reactAceComponent"
                     mode="assembly_x86"
                     theme="monokai"
@@ -58,9 +88,12 @@ class InputView extends React.Component{
                         tabSize: 5,
                     }}
                     placeHolder="Inserte su código aquí"
+                    annotations={this.state.annotations}
+                    onValidate={this.validate}
                 />
 
-                <button onClick={this.parse}>Start</button>
+                <button onClick={this.parse}>Check</button>
+                <button  disabled={this.state.annotations.length>0}>Start</button>
             </React.Fragment>
         );
     }

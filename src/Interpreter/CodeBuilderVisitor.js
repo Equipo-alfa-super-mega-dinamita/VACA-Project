@@ -1,6 +1,7 @@
 import asm8086Visitor from '../out/asm8086Visitor';
 
-class MyVisitor extends asm8086Visitor.asm8086Visitor{
+class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
+
     start(ctx){
         return this.visitProg(ctx);
     }
@@ -23,16 +24,16 @@ class MyVisitor extends asm8086Visitor.asm8086Visitor{
     }
 
     visitInstruction(ctx){
-        console.log(ctx.opcode().getText());
+        //console.log(ctx.opcode().getText());
         if(ctx.expressionlist()){
             this.visitExpressionList(ctx.expressionlist());
         }
     }
 
     visitExpressionList(ctx){
-        console.log(ctx.expression(null));
+        //console.log(ctx.expression(null));
         var expressions = ctx.expression(null);
     }
 }
 
-export default MyVisitor;
+export default CodeBuilderVisitor;
