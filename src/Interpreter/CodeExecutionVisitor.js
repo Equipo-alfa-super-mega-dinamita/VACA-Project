@@ -8,11 +8,18 @@ class CodeExecutionVisitor extends asm8086Visitor.asm8086Visitor{
     ramContent = new RAMContent();
     memoryPos = 0;
 
+
     constructor(state){
         super();
         this.labelContents = state.labelContents;
         this.ramContent = state.labelContents;
         this.memoryPos = state.memoryPos;
+        this.registers = {
+            AX:0,
+            BX:0,
+            CX:0,
+            DX:0,
+        }
     }
 
     start(ctx){
