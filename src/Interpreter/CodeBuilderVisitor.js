@@ -60,7 +60,7 @@ class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
         //console.log(opStr);
         //console.log(args);
         codeObj.instrText = opStr+argsStr;
-        codeObj.opCode = opStr;
+        codeObj.opCode = opStr.toUpperCase();
         codeObj.args = args;
         //Guardar instrucción en memoria
         this.storeInstructionInMemory(opStr,args);
@@ -125,7 +125,7 @@ class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
             argObj.value = ctx.string().getText();
         }else if(ctx.ptr()){
             //todo ---- ni idea que son xd
-            argObj.type = "ptr"
+            argObj.type = "ptr";
             argObj.value = ctx.ptr().getText();
         }else{
             var txt = ctx.getText();
