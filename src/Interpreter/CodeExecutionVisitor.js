@@ -90,44 +90,44 @@ class CodeExecutionVisitor extends asm8086Visitor.asm8086Visitor {
         this.SRegisters.AX = value
     };
 
-    getReg() {
+    getReg(type) {
         let ans = 0;
         switch (type) {
             case 1:
                 ans = this.registers.AX;
                 break;
             case 2:
-                ans = this.registers.BX = value;
+                ans = this.registers.BX;
                 break;
             case 3:
-                ans = this.registers.CX = value;
+                ans = this.registers.CX;
                 break;
             case 4:
-                ans = this.registers.DX = value;
+                ans = this.registers.DX;
                 break;
             case 5:
-                ans = this.registers.SP = value;
+                ans = this.registers.SP;
                 break;
             case 6:
-                ans = this.registers.BP = value;
+                ans = this.registers.BP;
                 break;
             case 7:
-                ans = this.registers.SI = value;
+                ans = this.registers.SI;
                 break;
             case 8:
-                ans = this.registers.DI = value;
+                ans = this.registers.DI;
                 break;
             case 9:
-                ans = this.SRegisters.CS = value;
+                ans = this.SRegisters.CS;
                 break;
             case 10:
-                ans = this.SRegisters.DS = value;
+                ans = this.SRegisters.DS;
                 break;
             case 11:
-                ans = this.SRegisters.SS = value;
+                ans = this.SRegisters.SS;
                 break;
             case 12:
-                ans = this.SRegisters.ES = value;
+                ans = this.SRegisters.ES;
                 break;
         }
         return ans;
