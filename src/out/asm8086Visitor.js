@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Generated from /home/julian/VACA-Project/grammar/asm8086.g4 by ANTLR 4.7.2
 // jshint ignore: start
 var antlr4 = require('antlr4/index');
@@ -182,6 +183,12 @@ asm8086Visitor.prototype.visitArgument = function(ctx) {
 
 // Visit a parse tree produced by asm8086Parser#ptr.
 asm8086Visitor.prototype.visitPtr = function(ctx) {
+  return this.visitChildren(ctx);
+};
+
+
+// Visit a parse tree produced by asm8086Parser#pointer_.
+asm8086Visitor.prototype.visitPointer_ = function(ctx) {
   return this.visitChildren(ctx);
 };
 

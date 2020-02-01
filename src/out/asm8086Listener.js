@@ -272,6 +272,15 @@ asm8086Listener.prototype.exitPtr = function(ctx) {
 };
 
 
+// Enter a parse tree produced by asm8086Parser#pointer_.
+asm8086Listener.prototype.enterPointer_ = function(ctx) {
+};
+
+// Exit a parse tree produced by asm8086Parser#pointer_.
+asm8086Listener.prototype.exitPointer_ = function(ctx) {
+};
+
+
 // Enter a parse tree produced by asm8086Parser#dollar.
 asm8086Listener.prototype.enterDollar = function(ctx) {
 };

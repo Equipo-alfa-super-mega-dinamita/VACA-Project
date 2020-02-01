@@ -1,0 +1,11 @@
+;Programa para dividir un numero de 16 bits entre uno de 8
+A: MOV SI, 500     ;Cargar 500 en el source index register
+
+B: MOV DI, 600     ;Cargar 600 en el destination index register
+
+MOV BL, [SI]    ;Poner el numero de 8 bits de memoria en BL
+INC SI          ;Apuntar a la siguiente direccion
+MOV AX, [SI]    ;Tomar el numero de 16 bits de memoria a AX
+DIV BL          ;Dividir AL entre BL
+MOV [DI], AX    ;Guardar el resultado de 16 bits en memoria
+HLT             ;Terminar el programa
