@@ -175,6 +175,9 @@ class CodeExecutionVisitor extends asm8086Visitor.asm8086Visitor {
         }
         return ans;
     }
+    setStackPos(index,value){
+        this.ramContent.memoryContent[index] = value;
+    }
 
     start(ctx) {
         let res = this.visitProg(ctx);
@@ -184,9 +187,11 @@ class CodeExecutionVisitor extends asm8086Visitor.asm8086Visitor {
     push(value) {
         this.registers.SP -= 2;
         this.ramContent.memoryContent[this.registers.SP] = value;
+        this.setStackPos(this.registers.SP,value);
     }
 
     pop(type) {
+         //falta
         this.setReg(this.ramContent.memoryContent[this.registers.SP],this.codReg(type));
     }
 
