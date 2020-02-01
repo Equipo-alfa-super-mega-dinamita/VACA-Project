@@ -1,6 +1,18 @@
 import asm8086Visitor from '../out/asm8086Visitor';
+import RAMContent from './RAMContent';
 
-class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
+class CodeVisitor extends asm8086Visitor.asm8086Visitor{
+
+    labelContents = {};
+
+
+
+    storeInstructionInMemory(){
+
+    }
+
+    ramContent = new RAMContent();
+    memoryPos = 0;
 
     start(ctx){
         return this.visitProg(ctx);
@@ -13,6 +25,7 @@ class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
         if(ctx.lbl()){
 
         }
+
         //Directiva vs Instrucción
         if(ctx.instruction()){
             this.visitInstruction(ctx.instruction());
@@ -25,6 +38,7 @@ class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
 
     visitInstruction(ctx){
         //console.log(ctx.opcode().getText());
+        //Guardar instrucción en memoria
         if(ctx.expressionlist()){
             this.visitExpressionList(ctx.expressionlist());
         }
@@ -36,4 +50,4 @@ class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
     }
 }
 
-export default CodeBuilderVisitor;
+export default CodeVisitor;
