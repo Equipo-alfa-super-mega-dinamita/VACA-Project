@@ -1,7 +1,10 @@
-// Generated from C:/Users/Nicolai/Documents/GitHub/VACA-Project/vaca/grammar\asm8086.g4 by ANTLR 4.7.2
+/* eslint-disable */
+// Generated from /home/julian/VACA-Project/grammar/asm8086.g4 by ANTLR 4.7.2
 // jshint ignore: start
 var antlr4 = require('antlr4/index');
 var asm8086Listener = require('./asm8086Listener').asm8086Listener;
+var asm8086Visitor = require('./asm8086Visitor').asm8086Visitor;
+
 var grammarFileName = "asm8086.g4";
 
 
@@ -380,6 +383,14 @@ ProgContext.prototype.exitRule = function(listener) {
 	}
 };
 
+ProgContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitProg(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -473,6 +484,14 @@ LineContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitLine(this);
 	}
+};
+
+LineContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitLine(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -592,6 +611,14 @@ InstructionContext.prototype.exitRule = function(listener) {
 	}
 };
 
+InstructionContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitInstruction(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -667,6 +694,14 @@ LblContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitLbl(this);
 	}
+};
+
+LblContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitLbl(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -792,6 +827,14 @@ AssemblerdirectiveContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitAssemblerdirective(this);
 	}
+};
+
+AssemblerdirectiveContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitAssemblerdirective(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -960,6 +1003,14 @@ RwContext.prototype.exitRule = function(listener) {
 	}
 };
 
+RwContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitRw(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -1037,6 +1088,14 @@ RbContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitRb(this);
 	}
+};
+
+RbContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitRb(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -1118,6 +1177,14 @@ RsContext.prototype.exitRule = function(listener) {
 	}
 };
 
+RsContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitRs(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -1193,6 +1260,14 @@ CsegContext.prototype.exitRule = function(listener) {
 	}
 };
 
+CsegContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitCseg(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -1264,6 +1339,14 @@ DsegContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitDseg(this);
 	}
+};
+
+DsegContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitDseg(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -1339,6 +1422,14 @@ DwContext.prototype.exitRule = function(listener) {
 	}
 };
 
+DwContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitDw(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -1405,6 +1496,14 @@ DbContext.prototype.exitRule = function(listener) {
 	}
 };
 
+DbContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitDb(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -1469,6 +1568,14 @@ DdContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitDd(this);
 	}
+};
+
+DdContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitDd(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -1541,6 +1648,14 @@ EquContext.prototype.exitRule = function(listener) {
 	}
 };
 
+EquContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitEqu(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -1607,6 +1722,14 @@ If_Context.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitIf_(this);
 	}
+};
+
+If_Context.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitIf_(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -1691,6 +1814,14 @@ AssemblerexpressionContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitAssemblerexpression(this);
 	}
+};
+
+AssemblerexpressionContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitAssemblerexpression(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -1783,6 +1914,14 @@ AssemblerlogicalContext.prototype.exitRule = function(listener) {
 	}
 };
 
+AssemblerlogicalContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitAssemblerlogical(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -1861,6 +2000,14 @@ AssemblertermContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitAssemblerterm(this);
 	}
+};
+
+AssemblertermContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitAssemblerterm(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -1944,6 +2091,14 @@ EndifContext.prototype.exitRule = function(listener) {
 	}
 };
 
+EndifContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitEndif(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -2002,6 +2157,14 @@ EndContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitEnd(this);
 	}
+};
+
+EndContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitEnd(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -2066,6 +2229,14 @@ OrgContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitOrg(this);
 	}
+};
+
+OrgContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitOrg(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -2134,6 +2305,14 @@ TitleContext.prototype.exitRule = function(listener) {
 	}
 };
 
+TitleContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitTitle(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -2198,6 +2377,14 @@ IncludeContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitInclude(this);
 	}
+};
+
+IncludeContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitInclude(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -2267,6 +2454,14 @@ ExpressionlistContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitExpressionlist(this);
 	}
+};
+
+ExpressionlistContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitExpressionlist(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -2340,6 +2535,14 @@ LabelContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitLabel(this);
 	}
+};
+
+LabelContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitLabel(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -2419,6 +2622,14 @@ ExpressionContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitExpression(this);
 	}
+};
+
+ExpressionContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitExpression(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -2501,6 +2712,14 @@ MultiplyingExpressionContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitMultiplyingExpression(this);
 	}
+};
+
+MultiplyingExpressionContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitMultiplyingExpression(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -2620,6 +2839,14 @@ ArgumentContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitArgument(this);
 	}
+};
+
+ArgumentContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitArgument(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -2805,6 +3032,14 @@ PtrContext.prototype.exitRule = function(listener) {
 	}
 };
 
+PtrContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitPtr(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -2881,6 +3116,14 @@ DollarContext.prototype.exitRule = function(listener) {
 	}
 };
 
+DollarContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitDollar(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -2939,6 +3182,14 @@ Register_Context.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitRegister_(this);
 	}
+};
+
+Register_Context.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitRegister_(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -3001,6 +3252,14 @@ StringContext.prototype.exitRule = function(listener) {
 	}
 };
 
+StringContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitString(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -3059,6 +3318,14 @@ NameContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitName(this);
 	}
+};
+
+NameContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitName(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -3123,6 +3390,14 @@ NumberContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitNumber(this);
 	}
+};
+
+NumberContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitNumber(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 
@@ -3194,6 +3469,14 @@ OpcodeContext.prototype.exitRule = function(listener) {
 	}
 };
 
+OpcodeContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitOpcode(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -3254,6 +3537,14 @@ RepContext.prototype.exitRule = function(listener) {
 	}
 };
 
+RepContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitRep(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
+};
+
 
 
 
@@ -3312,6 +3603,14 @@ CommentContext.prototype.exitRule = function(listener) {
     if(listener instanceof asm8086Listener ) {
         listener.exitComment(this);
 	}
+};
+
+CommentContext.prototype.accept = function(visitor) {
+    if ( visitor instanceof asm8086Visitor ) {
+        return visitor.visitComment(this);
+    } else {
+        return visitor.visitChildren(this);
+    }
 };
 
 

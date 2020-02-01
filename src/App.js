@@ -1,8 +1,7 @@
 import React from 'react';
 import './App.css';
 import Sketch from 'react-p5'
-
-import CodeEditor from "./Ace/CodeEditor";
+import InputView from "./Views/Input/InputView";
 
 function App() {
 
@@ -22,8 +21,8 @@ function App() {
 
   return (
       <React.Fragment>
-          <CodeEditor placeholder={"Enter your code here"}/>
-          <Sketch setup ={setup} draw = {draw}/>
+          {/*<Sketch setup ={setup} draw = {draw}/>*/}
+          <InputView/>
       </React.Fragment>
   );
 }
