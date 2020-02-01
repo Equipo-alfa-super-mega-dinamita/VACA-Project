@@ -7,6 +7,7 @@ class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
     labelContents = {};
     ramContent = new RAMContent();
     memoryPos = 0;
+    codeArray = [];
 
 
     storeInstructionInMemory(instTxt){
@@ -18,7 +19,7 @@ class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
         var res = this.visitProg(ctx);
         //console.log(this.ramContent);
         //console.log(this.labelContents);
-        return {labelContents: this.labelContents,ramContent:this.ramContent,memoryPos :this.memoryPos};
+        return {labelContents: this.labelContents,ramContent:this.ramContent,memoryPos :this.memoryPos,codeArray: this.codeArray};
     }
 
     visitLine(ctx){
@@ -38,25 +39,107 @@ class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
             }
             this.visitInstruction(ctx.instruction());
         }else if(ctx.assemblerdirective()){
+            //todo Visitar directivas, generar su código y usarlas de algún modo
             this.visitAssemblerDirective(ctx.assemblerdirective());
         }
 
-        //this.visitChildren(ctx);
     }
 
     visitInstruction(ctx){
-        //console.log(ctx.opcode().getText());
+        var codeObj = {};
+        //console.log(ctx.start.line); //OBTENER LINEA Y COLUMNA DEL CTX para generar errores
+        //todo errores de cantidad de argumentos
+        var opStr = ctx.opcode().getText();
+        var argsStr = "";
+        var args;
+
+        if (ctx.expressionlist()) {
+            args = this.visitExpressionList(ctx.expressionlist());
+            argsStr = " "+ctx.expressionlist().getText();
+        }
+        //console.log(opStr);
+        //console.log(args);
+        codeObj.instrText = opStr+argsStr;
+        codeObj.opCode = opStr;
+        codeObj.args = args;
         //Guardar instrucción en memoria
-        this.storeInstructionInMemory(ctx.opcode().getText());
-        //console.log(ctx.start.line); //OBTENER LINEA Y COLUMNA DEL CTX
-        if(ctx.expressionlist()){
-            this.visitExpressionList(ctx.expressionlist());
+        this.storeInstructionInMemory(opStr,args);
+        this.codeArray.push(codeObj);
+    }
+
+    visitExpressionList(ctx) {
+        //console.log(ctx.expression(null));
+        var args = [];
+        let expressions = ctx.expression(null);
+        expressions.forEach((expr) => {
+            args.push(this.visitExpression(expr));
+        });
+        return args;
+    }
+
+    visitExpression(ctx){
+        var firstVal = this.visitMultiplyingExpression(ctx.multiplyingExpression(0));
+        if(ctx.multiplyingExpression(null).length>1){
+            //Para sumar las expresiones y regresar el valor numerico total (implementar getRawVal para que sirva)
+            //Las sumas no se hacen en la construccion de codigo, sino en ejecución
+            /*var returnValue = firstVal;
+            returnValue.value = this.getRawVal(firstVal);
+            for(var iter = 1;iter<ctx.multiplyingExpression(null).length;iter++){
+                if(ctx.SIGN(iter-1).getText() === "-"){
+                    returnValue.value -= this.getRawVal(this.visitMultiplyingExpression(ctx.multiplyingExpression(iter)));
+                }else{
+                    returnValue.value += this.getRawVal(this.visitMultiplyingExpression(ctx.multiplyingExpression(iter)));
+                }
+            }
+            return returnValue;*/
+            return {type:"sum",value:ctx.getText()};
+        }else{
+            return firstVal;
         }
     }
 
-    visitExpressionList(ctx){
-        //console.log(ctx.expression(null));
-        var expressions = ctx.expression(null);
+    visitMultiplyingExpression(ctx){
+        //SOLO SE VISITA EL PRIMERO! no soporta multiplicaciones inline (debería???)
+        //todo ?
+        return this.visitArgument(ctx.argument(0));
+    }
+
+    visitArgument(ctx){
+        var argObj = {};
+        if(ctx.number()){
+            argObj.type = "number";
+            argObj.value = parseInt(ctx.number().getText());
+        }else if(ctx.dollar()){
+            argObj.type = "dollar";
+        }else if(ctx.register_()){
+            argObj.type = "register";
+            argObj.value = ctx.register_().getText();
+        }else if(ctx.pointer_()){
+            argObj.type = "pointer";
+            argObj.value = ctx.pointer_().getText();
+        }else if(ctx.name()){
+            argObj.type = "name";
+            argObj.value = ctx.name().getText();
+        }else if(ctx.string()){
+            argObj.type = "string";
+            argObj.value = ctx.string().getText();
+        }else if(ctx.ptr()){
+            //todo ---- ni idea que son xd
+            argObj.type = "ptr"
+            argObj.value = ctx.ptr().getText();
+        }else{
+            var txt = ctx.getText();
+            var checkChar = txt.charAt(txt.length-1);
+            if(checkChar===']'){
+                var exprContent = this.visitExpression(ctx.expression());
+                argObj.type = "memory";
+                argObj.value = exprContent.value;
+                argObj.valueType = exprContent.type;
+            }else if(checkChar === ')'){
+                //todo ---- que es esto? ----
+            }
+        }
+        return argObj;
     }
 }
 

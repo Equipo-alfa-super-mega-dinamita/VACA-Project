@@ -2,7 +2,7 @@ import asm8086Visitor from '../out/asm8086Visitor';
 import RAMContent from './RAMContent';
 
 
-class CodeExecutionVisitor extends asm8086Visitor.asm8086Visitor {
+class CodeExecutor{
     /*
     1 -> reg
     2 -> sReg
@@ -13,12 +13,14 @@ class CodeExecutionVisitor extends asm8086Visitor.asm8086Visitor {
     labelContents = {};
     ramContent = new RAMContent();
     memoryPos = 0;
+    execute = true;
+    codeArray;
 
     constructor(state) {
-        super();
         this.labelContents = state.labelContents;
-        this.ramContent = state.labelContents;
+        this.ramContent = state.ramContent;
         this.memoryPos = state.memoryPos;
+        this.codeArray = state.codeArray;
         this.registers = {
             AX: 0,
             BX: 0,
@@ -27,11 +29,12 @@ class CodeExecutionVisitor extends asm8086Visitor.asm8086Visitor {
             SP: 0,
             BP: 0,
             SI: 0,
-            DI: 0
+            DI: 0,
+            IP: 0,
         };
         this.SRegisters = {
             CS: 0,
-            DS: 16384,
+            DS: this.memoryPos,
             SS: 32768,
             ES: 49152
         };
@@ -180,9 +183,14 @@ class CodeExecutionVisitor extends asm8086Visitor.asm8086Visitor {
         this.ramContent.memoryContent[index] = value;
     }
 
-    start(ctx) {
-        let res = this.visitProg(ctx);
-        return res;
+    start(){
+        while(this.execute && this.registers.IP<this.SRegisters.DS){
+            var instruction = this.codeArray[this.registers.IP];
+            //todo ejecutar instruccion
+            console.log(instruction);
+            //dentro de la ejecución se modificaría el IP, aumentandolo o usandolo para los JMP, borrar siguiente linea cuando esté
+            this.registers.IP++;
+        }
     }
 
     push(value) {
@@ -195,7 +203,9 @@ class CodeExecutionVisitor extends asm8086Visitor.asm8086Visitor {
         if (type === 1){
 
         }else if(type === 2){
+
         }else if(type === 3){
+
         }
         return this.ramContent.memoryContent[this.registers.SP]
     }
@@ -209,110 +219,18 @@ class CodeExecutionVisitor extends asm8086Visitor.asm8086Visitor {
             if(this.labelContents[argObj.value]){
                 return this.labelContents[argObj.value]; //Etiqueta del codigo (no debería hacer falta usar esto)
             }
-            //--- TO DO --- Obtener valor de variable (aun no definimos variables xd)
+            //todo Obtener valor de variable (aun no definimos variables xd)
             return null;
         }else if(argObj.type === "memory"){
-            return this.ramContent[argObj.value];
+            return this.ramContent[this.getRawVal({type: argObj.valueType, value:argObj.value})]; //puede estar sirviendo mal
         }else if(argObj.type === "string"){
             // ????
             return null;
+        }else if(argObj.type === "sum"){
+            //todo sumar cosas
         }
-    }
-
-    visitLine(ctx) {
-        //Directiva vs Instrucción
-        if (ctx.instruction()) {
-            this.visitInstruction(ctx.instruction());
-        } else if (ctx.assemblerdirective()) {
-            this.visitAssemblerDirective(ctx.assemblerdirective()); //to do
-        }
-    }
-
-    visitOpcode(ctx) {
-        return ctx.OPCODE().getText();
-    }
-
-    visitInstruction(ctx) {
-        var opStr = ctx.opcode().getText();
-        var args;
-        if (ctx.expressionlist()) {
-            args = this.visitExpressionList(ctx.expressionlist());
-        }
-        console.log(opStr);
-        console.log(args);
-        //Aquí se harían las operaciones (y se guardarían los estados y la manera en que cambian, pero eso después xd)
-
-    }
-
-    visitExpressionList(ctx) {
-        //console.log(ctx.expression(null));
-        var args = [];
-        let expressions = ctx.expression(null);
-        expressions.forEach((expr) => {
-            args.push(this.visitExpression(expr));
-        });
-        return args;
-    }
-
-    visitExpression(ctx){
-        var firstVal = this.visitMultiplyingExpression(ctx.multiplyingExpression(0));
-        if(ctx.multiplyingExpression(null).length>1){
-            var returnValue = firstVal;
-            returnValue.value = this.getRawVal(firstVal);
-            for(var iter = 1;iter<ctx.multiplyingExpression(null).length;iter++){
-                if(ctx.SIGN(iter-1).getText() === "-"){
-                    returnValue.value -= this.getRawVal(this.visitMultiplyingExpression(ctx.multiplyingExpression(iter)));
-                }else{
-                    returnValue.value += this.getRawVal(this.visitMultiplyingExpression(ctx.multiplyingExpression(iter)));
-                }
-            }
-            return returnValue;
-        }else{
-            return firstVal;
-        }
-    }
-
-    visitMultiplyingExpression(ctx){
-        //SOLO SE VISITA EL PRIMERO! no soporta multiplicaciones inline (debería???)
-        return this.visitArgument(ctx.argument(0));
-    }
-
-    visitArgument(ctx){
-        var argObj = {};
-        if(ctx.number()){
-            argObj.type = "number";
-            argObj.value = parseInt(ctx.number().getText());
-        }else if(ctx.dollar()){
-            argObj.type = "dollar";
-        }else if(ctx.register_()){
-            argObj.type = "register";
-            argObj.value = ctx.register_().getText();
-        }else if(ctx.pointer_()){
-            argObj.type = "pointer";
-            argObj.value = ctx.pointer_().getText();
-        }else if(ctx.name()){
-            argObj.type = "name";
-            argObj.value = ctx.name().getText();
-        }else if(ctx.string()){
-            argObj.type = "string";
-            argObj.value = ctx.string().getText();
-        }else if(ctx.ptr()){
-            //----------TO DO----------- ni idea que son xd
-            argObj.type = "ptr"
-            argObj.value = ctx.ptr().getText();
-        }else{
-            var txt = ctx.getText();
-            var checkChar = txt.charAt(txt.length-1);
-            if(checkChar===']'){
-                argObj.type = "memory";
-                argObj.value = this.visitExpression(ctx.expression()).value;
-            }else if(checkChar === ')'){
-                //Que es esto? --- TO DO? ---
-            }
-        }
-        return argObj;
     }
 
 }
 
-export default CodeExecutionVisitor;
+export default CodeExecutor;

@@ -7,7 +7,7 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-assembly_x86";
 import "ace-builds/src-noconflict/theme-monokai";
 import CodeVisitor from '../../Interpreter/CodeBuilderVisitor';
-import CodeExecutionVisitor from '../../Interpreter/CodeExecutionVisitor';
+import CodeExecutor from '../../Interpreter/CodeExecutor';
 
 class InputView extends React.Component{
 
@@ -81,13 +81,15 @@ class InputView extends React.Component{
         try {
             var codeBuilderVisitor = new CodeVisitor();
             codeBuildResults = codeBuilderVisitor.start(tree);
+            console.log({codeBuildResults});
         }catch(error){
             console.error({error});
+            //todo procesar error y mostrar la anotación que pueda traer en ACE
             //console.log(error)
             return;
         }
-        var codeExecutionVisitor = new CodeExecutionVisitor(codeBuildResults);
-        var execResults = codeExecutionVisitor.start(tree);
+        var codeExecutionVisitor = new CodeExecutor(codeBuildResults);
+        var execResults = codeExecutionVisitor.start();
 
         //Animación
     };
