@@ -254,6 +254,7 @@ class CodeExecutor{
     }
 
     execInstruction(instr){
+        let args = instr.args;
         switch(instr.opCode){
             case "MOV":
                 let arg1 = instr.args[0];
@@ -277,11 +278,14 @@ class CodeExecutor{
                 break;
 
             case "PUSH":
-
+                this.registers.SP += 2;
+                this.ramContent[this.getLogMemoryDir({value:"SP",type:"pointer"})] =  this.getRawVal(args[0]);
                 this.registers.IP++;
                 break;
 
             case "POP":
+                this.ramContent[this.getLogMemoryDir(args[0])] = this.ramContent[this.getLogMemoryDir({value:"SP",type:"pointer"})];
+                this.registers.SP -= 2;
                 this.registers.IP++;
                 break;
 
