@@ -282,14 +282,14 @@ class CodeExecutor {
                 this.registers.SP += 1;
                 if (args[0].type === "register") {
                     let myVarAux = this.getRawVal(args[0]);
-                    this.ramContent[this.getLogMemoryDir({value: "SP", type: "pointer"})] = myVarAux & 0x0F;
+                    this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] = (myVarAux >> 8) & 0xff;
                     this.registers.SP += 1;
-                    this.ramContent[this.getLogMemoryDir({value: "SP", type: "pointer"})] = myVarAux  & 0xF0
+                    this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] =(myVarAux & 0xFF);
 
                 } else if (args[0].type === "memory") {
-                    this.ramContent[this.getLogMemoryDir({value: "SP", type: "pointer"})] = this.getRawVal(args[0]);
+                    this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] = this.getRawVal(args[0]);
                     this.registers.SP += 1;
-                    this.ramContent[this.getLogMemoryDir({value: "SP", type: "pointer"})] = 0;
+                    this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] = 0;
                 } else {
                     //TODO Error generator
                 }
@@ -297,6 +297,7 @@ class CodeExecutor {
                 break;
 
             case "POP":
+                this.ramContent[this.getLogMemoryDir(args[0])] = this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})];
                 if (args[0].type === "register") {
 
                 } else if (args[0].type === "memory") {
@@ -304,15 +305,12 @@ class CodeExecutor {
                 } else {
                     //TODO Error generator
                 }
-                this.ramContent[this.getLogMemoryDir(args[0])] = this.ramContent[this.getLogMemoryDir({
-                    value: "SP",
-                    type: "pointer"
-                })];
                 this.registers.SP -= 2;
                 this.registers.IP++;
                 break;
 
             case "DIV":
+
                 this.registers.IP++;
                 break;
             case "INC":
