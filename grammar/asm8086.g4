@@ -78,6 +78,7 @@ argument: number
    | dollar
    | register_
    | name
+   | pointer_
    | string
    | ('(' expression ')')
    | ((number | name)? '[' expression ']')
@@ -87,6 +88,7 @@ argument: number
    | LENGTH expression
    | (register_ ':') expression;
 ptr: (BYTE | WORD | DWORD)? PTR;
+pointer_ : POINTER;
 dollar: DOLLAR;
 register_: REGISTER;
 string: STRING;
@@ -95,6 +97,11 @@ number: SIGN? NUMBER;
 opcode: OPCODE;
 rep: REP;
 comment: COMMENT;
+POINTER:
+    S P
+  | B P
+  | S I
+  | D I;
 BYTE: B Y T E;
 WORD: W O R D;
 DWORD: D W O R D;

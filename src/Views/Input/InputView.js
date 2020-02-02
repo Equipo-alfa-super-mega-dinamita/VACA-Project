@@ -7,7 +7,7 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-assembly_x86";
 import "ace-builds/src-noconflict/theme-monokai";
 import CodeVisitor from '../../Interpreter/CodeBuilderVisitor';
-import CodeExecutionVisitor from '../../Interpreter/CodeExecutionVisitor';
+import CodeExecutor from '../../Interpreter/CodeExecutor';
 
 class InputView extends React.Component{
 
@@ -27,7 +27,7 @@ class InputView extends React.Component{
         super(props);
         this.state = {
             codeString : this.initialValue,
-            annotations : [{row: 1, column:1,type:'error',text:'Puto el que lo lea'}],
+            annotations : [{row: 1, column:1,type:'error',text:'Check your code for errors before executing it'}],
             validCode:false,
             aceState:null
         };
@@ -36,7 +36,7 @@ class InputView extends React.Component{
     }
 
     componentDidUpdate(prevProps) {
-        console.log(this.state);
+        //console.log(this.state);
     }
 
     parse = () =>{
@@ -74,18 +74,23 @@ class InputView extends React.Component{
         var parser = new asm8086Parser.asm8086Parser(tokens);
         parser.buildParseTrees = true;
         var tree = parser.prog();
+        var codeBuildResults;
 
-        //Interpretado del código
+
+        //Build del código
         try {
             var codeBuilderVisitor = new CodeVisitor();
-            var execState = codeBuilderVisitor.start(tree);
-            var codeExecutionVisitor = new CodeExecutionVisitor(execState);
-            var results = codeExecutionVisitor.start(tree);
+            codeBuildResults = codeBuilderVisitor.start(tree);
+            console.log({codeBuildResults});
         }catch(error){
             console.error({error});
+            //todo procesar error y mostrar la anotación que pueda traer en ACE
             //console.log(error)
             return;
         }
+        var codeExecutionVisitor = new CodeExecutor(codeBuildResults);
+        var execResults = codeExecutionVisitor.start();
+
         //Animación
     };
 
