@@ -168,22 +168,17 @@ class CodeExecutor {
         }
     }
 
-    push(value) {
-        this.registers.SP -= 2;
-        this.ramContent[this.registers.SP] = value;
-        this.setStackPos(this.registers.SP, value);
+    splitNumber(number) {
+        let lsb = (number & 0xFF), msb = (number >> 8) & 0xff;
+        return [msb , lsb];
     }
 
-    pop(type) {
-        if (type === 1) {
-
-        } else if (type === 2) {
-
-        } else if (type === 3) {
-
-        }
-        return this.ramContent[this.registers.SP]
+    rebuildNumber(block1, block2) {
+        let ans = block2 << 8;
+        ans += block1;
+        return ans;
     }
+
 
     getRawVal(argObj) {
         if (argObj.type === "number") {
@@ -256,6 +251,7 @@ class CodeExecutor {
     execInstruction(instr) {
         //little endian: primero menos y luego más
         let args = instr.args;
+        let [msb , lsb] = [-1,-1];
         switch (instr.opCode) {
             case "MOV":
                 let arg1 = instr.args[0];
@@ -282,30 +278,39 @@ class CodeExecutor {
                 this.registers.SP += 1;
                 if (args[0].type === "register") {
                     let myVarAux = this.getRawVal(args[0]);
-                    this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] = (myVarAux >> 8) & 0xff;
+                    [msb , lsb] = this.splitNumber(myVarAux);
+                    this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] = msb;
                     this.registers.SP += 1;
-                    this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] =(myVarAux & 0xFF);
+                    this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] = lsb;
 
                 } else if (args[0].type === "memory") {
-                    this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] = this.getRawVal(args[0]);
+                    this.ramContent[this.getLogMemoryDir({
+                        value: "SP",
+                        valueType: "pointer"
+                    })] = this.getRawVal(args[0]);
                     this.registers.SP += 1;
                     this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] = 0;
                 } else {
-                    //TODO Error generator
+                    //TODO Error generator wrong data type
                 }
                 this.registers.IP++;
                 break;
 
             case "POP":
-                this.ramContent[this.getLogMemoryDir(args[0])] = this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})];
+                //TODO Error generator SP neg & wrong data type
+                let block1 = this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})];
+                this.registers.SP -= 1;
+                let block2 = this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})];
+                this.registers.SP -= 1;
                 if (args[0].type === "register") {
-
+                    this.setReg(this.rebuildNumber(block1, block2), args[0].value);
                 } else if (args[0].type === "memory") {
+                    //TODO Tener en cuenta que debería estar ordenado por parejas
+                    //Debo meter la pareja? Si es así, Que pasa si me dan la direccion del final de la pareja?
 
                 } else {
                     //TODO Error generator
                 }
-                this.registers.SP -= 2;
                 this.registers.IP++;
                 break;
 
