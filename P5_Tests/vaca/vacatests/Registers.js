@@ -91,9 +91,9 @@ class Registers{
                     col: '#ffb961',
                     value: true
                 }
-                
+
             }
-            
+
         };
         this.currentItem = this.flags['status'].CF;
         this.registers =
@@ -106,7 +106,7 @@ class Registers{
                         x: this.x + this.size*0.7,
                         y: this.y + this.size*0.05,
                         col:'#fd5e53',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     },
                     'BX': {
                         'id': 'BX',
@@ -115,7 +115,7 @@ class Registers{
                         x: this.x + this.size*0.7,
                         y: this.y + this.size*0.27,
                         col:'#75b79e',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     },
                     'CX': {
                         'id': 'CX',
@@ -124,7 +124,7 @@ class Registers{
                         x: this.x + this.size*0.7,
                         y: this.y + this.size*0.49,
                         col:'#9aceff',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     },
                     'DX': {
                         'id': 'DX',
@@ -133,7 +133,7 @@ class Registers{
                         x: this.x + this.size*0.7,
                         y: this.y + this.size*0.71,
                         col:'#fdd365',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     },
                 },
                 pointer:{
@@ -144,7 +144,7 @@ class Registers{
                         x: this.x + this.size*0.7,
                         y: this.y + this.size*1.0,
                         col:'#12cad6',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     },
                     'BP': {
                         'id': 'BP',
@@ -153,7 +153,7 @@ class Registers{
                         x: this.x + this.size*0.7,
                         y: this.y + this.size*1.22,
                         col:'#ccda46',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     }
                 },
                 index:{
@@ -164,7 +164,7 @@ class Registers{
                         x: this.x + this.size*0.05,
                         y: this.y + this.size*1.0,
                         col:'#93b5b3',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     },
                     'DI': {
                         'id': 'DI',
@@ -173,7 +173,7 @@ class Registers{
                         x: this.x + this.size*0.05,
                         y: this.y + this.size*1.22,
                         col:'#95a7a0',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     }
                 },
                 segment:{
@@ -184,7 +184,7 @@ class Registers{
                         x: this.x + this.size*0.05,
                         y: this.y + this.size*0.05,
                         col:'#3fc5f0',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     },
                     'DS': {
                         'id': 'DS',
@@ -193,7 +193,7 @@ class Registers{
                         x: this.x + this.size*0.05,
                         y: this.y + this.size*0.27,
                         col:'#42dee1',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     },
                     'SS': {
                         'id': 'SS',
@@ -202,7 +202,7 @@ class Registers{
                         x: this.x + this.size*0.05,
                         y: this.y + this.size*0.49,
                         col:'#6decb9',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     },
                     'ES': {
                         'id': 'ES',
@@ -211,7 +211,7 @@ class Registers{
                         x: this.x + this.size*0.05,
                         y: this.y + this.size*0.71,
                         col:'#a1dd70',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     }
                 },
                 instruction:{
@@ -222,7 +222,7 @@ class Registers{
                         x: this.x + this.size*0.7,
                         y: this.y + this.size*1.5,
                         col:'#ca5fa6',
-						content: Math.floor(random(2**8))
+						content: Math.floor(random(2**16))
                     }
                 }
             };

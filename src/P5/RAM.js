@@ -4,24 +4,14 @@ const toBin = (i, pad) => (i).toString(2).padStart(pad,'0');
 let p5;
 export default class RAM{
 
-    constructor(parentP5, x , y , size, array_size){
+    constructor(parentP5, x , y , size, array_size, cpu){
         p5 = parentP5;
+        this.cpu = cpu;
+        console.log(cpu)
         this.x = x;
         this.y = y;
         this.size = size;
         this.inHex = true;
-        //this.gui = createGui();
-        this.buffer = new ArrayBuffer(array_size);
-        this.memory = new Array(array_size);
-        this.memoryContent = new Uint8Array(this.buffer);
-        let n = this.memory.length;
-        for (let i = 0; i <  n; i++) {
-            this.memory[i] = {
-                address:  toHex(i,4),
-                color: p5.color('#111111')
-            }
-            this.memoryContent[i] = p5.floor(p5.random(2**8));
-        }
         this.slider = {
             val : 2,
             x : x + size*1.05,
@@ -61,8 +51,8 @@ export default class RAM{
 
 
         //setInterval(()=>{    this.slider.val+=1}, 1000)
-        console.log(this.memory);
-        console.log(this.memoryContent);
+        console.log(this.cpu.memory);
+        console.log(this.cpu.memoryContent);
 
     }
 
@@ -83,10 +73,9 @@ export default class RAM{
             this.memorySlot(this.x + this.size/2 +this.size*0.02 , this.y + (max-j-1)*(h + this.size*0.02) , this.size, index -1);
 
             //  L Register
-
             p5.push(); p5.stroke(0); p5.strokeWeight(2); p5.fill(255); p5.textSize(this.size/25);
 
-            //console.log(this.memory[index].address)
+            //console.log(this.cpu.memory[index].address)
             p5.pop();
         }
         p5.fill(0); p5.stroke(0);
@@ -97,7 +86,7 @@ export default class RAM{
     memorySlot(x,y,size, index){
         p5.push();
 
-        //fill(this.memory[index] !== undefined ? this.memory[index].color : '#ffffff');
+        //fill(this.cpu.memory[index] !== undefined ? this.cpu.memory[index].color : '#ffffff');
         p5.strokeWeight(size*0.01);
         let h = 2 * size / nitems;
         p5.stroke('#007065');
@@ -110,7 +99,7 @@ export default class RAM{
 
         p5.textAlign(p5.CENTER, p5.CENTER); p5.textSize(size/20 );
 
-        let bin = toBin(this.memoryContent[index], 8).split('');
+        let bin = toBin(this.cpu.memoryContent[index], 8).split('');
         p5.rectMode(p5.CORNER);
         p5.fill('#007065');
         p5.rect(x,y, size*0.15, h*0.25);
@@ -162,7 +151,7 @@ export default class RAM{
 
         p5.textSize(size*0.04 ); p5.fill(p5.BACKGROUND_COLOR); p5.noStroke();
         p5.text(
-            '0x' + this.memory[index].address,
+            '0x' + this.cpu.memory[index].address,
             x,
             y ,
             size*0.16,
@@ -171,7 +160,7 @@ export default class RAM{
         p5.textSize(size*0.08 );   p5.fill('#58b368');
 
         p5.text(
-            this.inHex ? '0x' + toHex(this.memoryContent[index],2) : this.memoryContent[index],
+            this.inHex ? '0x' + toHex(this.cpu.memoryContent[index],2) : this.cpu.memoryContent[index],
             x ,
             y ,
             size*0.5,
@@ -190,7 +179,7 @@ export default class RAM{
             newval-= newval % 2;
 
             newval = newval < 0 ? 2: newval;
-            newval = newval > this.memoryContent.length - 2 * (nitems-1) ? this.memoryContent.length - 2*(nitems-1): newval;
+            newval = newval > this.cpu.memoryContent.length - 2 * (nitems-1) ? this.cpu.memoryContent.length - 2*(nitems-1): newval;
             this.slider.val = newval;
 
 
@@ -211,7 +200,7 @@ export default class RAM{
         );
 
         let scrollY = p5.map(val ,
-            this.memoryContent.length - nitems*2 + 2, 2,
+            this.cpu.memoryContent.length - nitems*2 + 2, 2,
             y,
             y + h
             );
@@ -232,10 +221,8 @@ export default class RAM{
                 ey,
                 y,
                 y + h,
-                this.memoryContent.length - nitems*2 + 2 ,2
+                this.cpu.memoryContent.length - nitems*2 + 2 ,2
             );
-
-
 
         }
     }

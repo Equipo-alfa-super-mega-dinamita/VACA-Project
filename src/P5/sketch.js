@@ -84,7 +84,7 @@ export default function sketch(p5){
 
     p5.mouseClicked = function() {
         console.log(p5.mouseX, p5.mouseY);
-        executionUnit.memory.onClick(p5.mouseX, p5.mouseY);
+        executionUnit.onClick(p5.mouseX, p5.mouseY);
     }
     p5.windowResized =function() {
         p5.resizeCanvas(p5.windowWidth, 0.5*p5.windowWidth);

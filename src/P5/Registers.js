@@ -2,13 +2,13 @@ let p5;
 export default class Registers{
 
 
-    constructor(p5Parent, x,y,size) {
+    constructor(p5Parent, x,y,size, parentCPU) {
+        this.cpu = parentCPU;
         p5 = p5Parent;
         this.x = x;
         this.y = y;
         this.size = size;
         this.inHex = true;
-        p5.colorMode(p5.HSB,100);
         this.flags = {
             control:{
                 'TF': {
@@ -98,178 +98,140 @@ export default class Registers{
             }
 
         };
-        this.currentItem = this.flags['status'].CF;
-        this.registers =
-            {
-                general: {
-                    'AX': {
-                        'id': 'AX',
-                        'name': 'Accumulator Register',
-                        'description': '',
-                        x: this.x + this.size*0.7,
-                        y: this.y + this.size*0.05,
-                        col:'#fd5e53',
-                        content: Math.floor(p5.random(2**8))
-                    },
-                    'BX': {
-                        'id': 'BX',
-                        'name': 'Base Register',
-                        'description': '',
-                        x: this.x + this.size*0.7,
-                        y: this.y + this.size*0.27,
-                        col:'#75b79e',
-                        content: Math.floor(p5.random(2**8))
-                    },
-                    'CX': {
-                        'id': 'CX',
-                        'name': 'Count Register',
-                        'description': '',
-                        x: this.x + this.size*0.7,
-                        y: this.y + this.size*0.49,
-                        col:'#9aceff',
-                        content: Math.floor(p5.random(2**8))
-                    },
-                    'DX': {
-                        'id': 'DX',
-                        'name': 'Data Register',
-                        'description': '',
-                        x: this.x + this.size*0.7,
-                        y: this.y + this.size*0.71,
-                        col:'#fdd365',
-                        content: Math.floor(p5.random(2**8))
-                    },
+        this.registers = {
+            general: {
+                'AX': {
+                    'id': 'AX',
+                    'name': 'Accumulator Register',
+                    'description': 'Es el acumulador.',
+                    x: this.x + this.size*0.7,
+                    y: this.y + this.size*0.05,
+                    col:'#fd5e53',
+                    content: Math.floor(p5.random(2**8))
                 },
-                pointer:{
-                    'SP': {
-                        'id': 'SP',
-                        'name': 'Stack Pointer',
-                        'description': '',
-                        x: this.x + this.size*0.7,
-                        y: this.y + this.size*1.0,
-                        col:'#12cad6',
-                        content: Math.floor(p5.random(2**8))
-                    },
-                    'BP': {
-                        'id': 'BP',
-                        'name': 'Base Pointer',
-                        'description': '',
-                        x: this.x + this.size*0.7,
-                        y: this.y + this.size*1.22,
-                        col:'#ccda46',
-                        content: Math.floor(p5.random(2**8))
-                    }
+                'BX': {
+                    'id': 'BX',
+                    'name': 'Base Register',
+                    'description': 'Es el registro base.',
+                    x: this.x + this.size*0.7,
+                    y: this.y + this.size*0.27,
+                    col:'#75b79e',
+                    content: Math.floor(p5.random(2**8))
                 },
-                index:{
-                    'SI': {
-                        'id': 'SI',
-                        'name': 'Source Index',
-                        'description': '',
-                        x: this.x + this.size*0.05,
-                        y: this.y + this.size*1.0,
-                        col:'#93b5b3',
-                        content: Math.floor(p5.random(2**8))
-                    },
-                    'DI': {
-                        'id': 'DI',
-                        'name': 'Destination Index',
-                        'description': '',
-                        x: this.x + this.size*0.05,
-                        y: this.y + this.size*1.22,
-                        col:'#95a7a0',
-                        content: Math.floor(p5.random(2**8))
-                    }
+                'CX': {
+                    'id': 'CX',
+                    'name': 'Count Register',
+                    'description': 'Es el contador.',
+                    x: this.x + this.size*0.7,
+                    y: this.y + this.size*0.49,
+                    col:'#9aceff',
+                    content: Math.floor(p5.random(2**8))
                 },
-                segment:{
-                    'CS': {
-                        'id': 'CS',
-                        'name': 'Code Segment',
-                        'description': '',
-                        x: this.x + this.size*0.05,
-                        y: this.y + this.size*0.05,
-                        col:'#3fc5f0',
-                        content: Math.floor(p5.random(2**8))
-                    },
-                    'DS': {
-                        'id': 'DS',
-                        'name': 'Data Segment',
-                        'description': '',
-                        x: this.x + this.size*0.05,
-                        y: this.y + this.size*0.27,
-                        col:'#42dee1',
-                        content: Math.floor(p5.random(2**8))
-                    },
-                    'SS': {
-                        'id': 'SS',
-                        'name': 'Stack Segment',
-                        'description': '',
-                        x: this.x + this.size*0.05,
-                        y: this.y + this.size*0.49,
-                        col:'#6decb9',
-                        content: Math.floor(p5.random(2**8))
-                    },
-                    'ES': {
-                        'id': 'ES',
-                        'name': 'Extra Segment',
-                        'description': '',
-                        x: this.x + this.size*0.05,
-                        y: this.y + this.size*0.71,
-                        col:'#a1dd70',
-                        content: Math.floor(p5.random(2**8))
-                    }
+                'DX': {
+                    'id': 'DX',
+                    'name': 'Data Register',
+                    'description': '',
+                    x: this.x + this.size*0.7,
+                    y: this.y + this.size*0.71,
+                    col:'#fdd365',
+                    content: Math.floor(p5.random(2**8))
                 },
-                instruction:{
-                    'IP': {
-                        'id': 'IP',
-                        'name': 'Instruction Pointer',
-                        'description': '',
-                        x: this.x + this.size*0.7,
-                        y: this.y + this.size*1.5,
-                        col:'#ca5fa6',
-                        content: Math.floor(p5.random(2**8))
-                    }
+            },
+            pointer:{
+                'SP': {
+                    'id': 'SP',
+                    'name': 'Stack Pointer',
+                    'description': '',
+                    x: this.x + this.size*0.7,
+                    y: this.y + this.size*1.0,
+                    col:'#12cad6',
+                    content: Math.floor(p5.random(2**8))
+                },
+                'BP': {
+                    'id': 'BP',
+                    'name': 'Base Pointer',
+                    'description': '',
+                    x: this.x + this.size*0.7,
+                    y: this.y + this.size*1.22,
+                    col:'#ccda46',
+                    content: Math.floor(p5.random(2**8))
                 }
-            };
+            },
+            index:{
+                'SI': {
+                    'id': 'SI',
+                    'name': 'Source Index',
+                    'description': '',
+                    x: this.x + this.size*0.05,
+                    y: this.y + this.size*1.0,
+                    col:'#93b5b3',
+                    content: Math.floor(p5.random(2**8))
+                },
+                'DI': {
+                    'id': 'DI',
+                    'name': 'Destination Index',
+                    'description': '',
+                    x: this.x + this.size*0.05,
+                    y: this.y + this.size*1.22,
+                    col:'#95a7a0',
+                    content: Math.floor(p5.random(2**8))
+                }
+            },
+            segment:{
+                'CS': {
+                    'id': 'CS',
+                    'name': 'Code Segment',
+                    'description': '',
+                    x: this.x + this.size*0.05,
+                    y: this.y + this.size*0.05,
+                    col:'#3fc5f0',
+                    content: Math.floor(p5.random(2**8))
+                },
+                'DS': {
+                    'id': 'DS',
+                    'name': 'Data Segment',
+                    'description': '',
+                    x: this.x + this.size*0.05,
+                    y: this.y + this.size*0.27,
+                    col:'#42dee1',
+                    content: Math.floor(p5.random(2**8))
+                },
+                'SS': {
+                    'id': 'SS',
+                    'name': 'Stack Segment',
+                    'description': '',
+                    x: this.x + this.size*0.05,
+                    y: this.y + this.size*0.49,
+                    col:'#6decb9',
+                    content: Math.floor(p5.random(2**8))
+                },
+                'ES': {
+                    'id': 'ES',
+                    'name': 'Extra Segment',
+                    'description': '',
+                    x: this.x + this.size*0.05,
+                    y: this.y + this.size*0.71,
+                    col:'#a1dd70',
+                    content: Math.floor(p5.random(2**8))
+                }
+            },
+            instruction:{
+                'IP': {
+                    'id': 'IP',
+                    'name': 'Instruction Pointer',
+                    'description': '',
+                    x: this.x + this.size*0.7,
+                    y: this.y + this.size*1.5,
+                    col:'#ca5fa6',
+                    content: Math.floor(p5.random(2**8))
+                }
+            }
+        };
+        p5.colorMode(p5.HSB,100);
+
+        this.currentItem = this.flags['status'].CF;
 
         let data = { ...this.flags, ... this.registers};
-
-        for(let type in this.registers){
-            for (let item in this.registers[type]){
-                let register = this.registers[type][item];
-                if(register && !register.ux){
-                    /*
-                    p5 experience
-                    register.ux = uxRect(register.x, register.y, this.size*0.5, this.size*0.2);
-                    register.ux.uxNoFillState = true;
-                    register.ux.uxNoStrokeState = true;
-                    register.ux.uxEvent('click', ()=> {
-                        this.currentItem = register
-                        console.log(register);
-                    })*/
-                }
-            }
-        }
-
-        for(let type in this.flags){
-            for (let item in this.flags[type]){
-                let flag = this.flags[type][item];
-                if(flag && !flag.ux){
-                    /*let size = this.size*0.125;
-                    flag.ux = uxEllipse(flag.x + size*0.5,
-                        flag.y + size* 0.79,
-                        size*1.2,
-                        size*1.2   );
-                    flag.ux.uxNoFillState = true;
-
-                    flag.ux.uxNoStrokeState = true;
-                    flag.ux.uxEvent('click', ()=> {
-                        this.currentItem = flag
-                        console.log(flag);
-                    })*/
-                }
-            }
-
-        }
-
 
     }
 
@@ -307,7 +269,6 @@ export default class Registers{
         p5.fill(51,51,51,5);
         p5.rect(this.x, this.y, this.size*1.25, this.size * 2.4);
         p5.noStroke();
-
         for (let item in this.registers['general']){
             let register = this.registers['general'][item];
             this.registerDisplay( register );
@@ -336,17 +297,25 @@ export default class Registers{
         p5.fill(33);
         let {id, name, description} = this.currentItem;
         p5.textSize(this.size* 0.0625);
+        p5.textFont(p5.InstructionsFont);
+        p5.textAlign(p5.LEFT, p5.TOP);
         p5.text(id + ': ' + name,
             this.x + this.size*0.05,
             this.y + this.size*2.025,
             this.size*1,
             this.size*0.5
         );
-
+        p5.textSize(this.size* 0.03725);
+        p5.text(description,
+            this.x + this.size*0.05,
+            this.y + this.size*2.125,
+            this.size*0.5,
+            this.size*0.5
+        );
         p5.pop();
     }
     registerDisplay({x,y,col,id,content}) {
-
+        //console.log({x,y,col,id,content});
         if (content === undefined) return;
         id = id ? id : '';
         p5.push();
@@ -507,6 +476,40 @@ export default class Registers{
 
 
 
+    }
+
+    onClick(ex,ey){
+        for (let type in this.registers){
+            for( let rname in this.registers[type]){
+                let {x, y, name} = this.registers[type][rname];
+                let w = this.size* 0.5;
+                let h = this.size* 0.2;
+
+                if( ex > x && ex < x + w && ey > y && ey < y + h){
+                    this.currentItem = this.registers[type][rname];
+                }
+            }
+        }
+        for (let type in this.flags){
+            //console.log(this.flags);
+
+            /*flag.x + size*0.5,
+            flag.y + size* 0.79,
+            size*1.2,
+            size*1.2*/
+            let size = this.size*0.125;
+            for( let rname in this.flags[type]){
+                let {x, y, name} = this.flags[type][rname];
+                x +=  size*0.5;
+                y +=  size*0.79;
+                let r = this.size* 0.075;
+
+                if( (ex - x)**2 + (ey - y)**2 < (r)*(r)){
+                    this.currentItem = this.flags[type][rname];
+                    this.flags[type][rname].value = !this.flags[type][rname].value;
+                }
+            }
+        }
     }
 
 
