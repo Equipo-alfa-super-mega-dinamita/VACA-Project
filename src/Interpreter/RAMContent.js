@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const nitems = 8;
 const toHex = (i, pad) => (i).toString(16).padStart(pad,'0')
 const toBin = (i, pad) => (i).toString(2).padStart(pad,'0');

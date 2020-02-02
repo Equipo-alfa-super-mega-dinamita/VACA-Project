@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import asm8086Visitor from '../out/asm8086Visitor';
 import RAMContent from './RAMContent';
 

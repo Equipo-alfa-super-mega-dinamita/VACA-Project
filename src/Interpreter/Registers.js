@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 class Registers{
 
     constructor(x,y,size) {
@@ -44,9 +46,9 @@ class Registers{
                     'name': 'Carry Flag',
                     'description': ''
                 }
-                
+
             }
-            
+
         }
         this.registers =
             {

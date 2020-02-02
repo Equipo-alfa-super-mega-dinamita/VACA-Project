@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import asm8086Lexer from "../../out/asm8086Lexer"
 import asm8086Parser from "../../out/asm8086Parser"

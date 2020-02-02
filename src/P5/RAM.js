@@ -2,13 +2,15 @@ const nitems = 10;
 const toHex = (i, pad) => (i).toString(16).padStart(pad,'0')
 const toBin = (i, pad) => (i).toString(2).padStart(pad,'0');
 let p5;
-class RAM {
-    constructor(x , y , size, array_size){
+export default class RAM{
+
+    constructor(parentP5, x , y , size, array_size){
+        p5 = parentP5;
         this.x = x;
         this.y = y;
         this.size = size;
         this.inHex = true;
-        this.gui = createGui();
+        //this.gui = createGui();
         this.buffer = new ArrayBuffer(array_size);
         this.memory = new Array(array_size);
         this.memoryContent = new Uint8Array(this.buffer);
@@ -16,12 +18,15 @@ class RAM {
         for (let i = 0; i <  n; i++) {
             this.memory[i] = {
                 address:  toHex(i,4),
-                color: color('#111111')
+                color: p5.color('#111111')
             }
-            this.memoryContent[i] = floor(random(2**8));
+            this.memoryContent[i] = p5.floor(p5.random(2**8));
         }
+        this.slider = {val : 2}
+        //this.slider = createSliderV("RAM-Slider", x+ size + 2 + size*0.02, y, 0.1*size , 2.2*size , 2, array_size - nitems*2 + 2);
+        /*
+        SLIDER - TOUCHGUI LIBRARY
 
-        this.slider = createSliderV("RAM-Slider", x+ size + 2 + size*0.02, y, 0.1*size , 2.2*size , 2, array_size - nitems*2 + 2);
         this.slider.isInteger = true
         this.slider.setStyle({
             rounding: 0,
@@ -41,7 +46,7 @@ class RAM {
             fillTrackActive: color('#aaaaaa'),
             fillHandleActive: color('#e7e7e7')
 
-        });
+        });*/
 
 
         //setInterval(()=>{    this.slider.val+=1}, 1000)
@@ -50,13 +55,11 @@ class RAM {
 
     }
 
-
-
     display (){
-        push();
-        noStroke(0);colorMode(HSB,100);
+        p5.push();
+        p5.noStroke(0); p5.colorMode(p5.HSB,100);
 
-        let start = floor(this.slider.val) ;
+        let start = p5.floor(this.slider.val) ;
         let h = 2*this.size / nitems;
 
         let max = nitems;
@@ -70,67 +73,65 @@ class RAM {
 
             //  L Register
 
-            push();stroke(0); strokeWeight(2); fill(255);textSize(this.size/25);
+            p5.push(); p5.stroke(0); p5.strokeWeight(2); p5.fill(255); p5.textSize(this.size/25);
 
             //console.log(this.memory[index].address)
-            pop();
+            p5.pop();
         }
-        fill(0); stroke(0);
-        pop();
+        p5.fill(0); p5.stroke(0);
+        p5.pop();
     }
 
-
-
     memorySlot(x,y,size, index){
-        push();
+        p5.push();
 
         //fill(this.memory[index] !== undefined ? this.memory[index].color : '#ffffff');
-        strokeWeight(size*0.01);
+        p5.strokeWeight(size*0.01);
         let h = 2 * size / nitems;
-        stroke('#007065');
-        noFill();
-        rect(x,
+        p5.stroke('#007065');
+        p5.noFill();
+        p5.rect(x,
             y ,
             size/2,
             h);
 
 
-        textAlign(CENTER, CENTER); textSize(size/20 );
+        p5.textAlign(p5.CENTER, p5.CENTER); p5.textSize(size/20 );
 
         let bin = toBin(this.memoryContent[index], 8).split('');
-        rectMode(CORNER);
-        fill('#007065');
-        rect(x,y, size*0.15, h*0.25);
-        rect(
+        p5.rectMode(p5.CORNER);
+        p5.fill('#007065');
+        p5.rect(x,y, size*0.15, h*0.25);
+        p5.rect(
             x,y + h*0.7,
             size/2, 0.3*h
         );
-        rect(
+        p5.rect(
             x,y,
             size*0.5,
-        h*0.05);
+            h*0.05);
 
-        rect(
+        p5.rect(
             x,y,
             0.05*h, h
         );
-        rect(
+        p5.rect(
             x + size*0.5 ,y,
             -0.05*h, h
         );
         for (let i = 0; i < 8 ; i++) {
-            stroke('#007065');
-            line(2 + x + i * (size-8) / 16,
+            p5.stroke('#007065');
+            p5.line(2 + x + i * (size-8) / 16,
                 -2 + y + 0.9 * h,
                 2 + x  + i * (size-8) / 16,
                 -2 + y + h);
-            let back = color(BACKGROUND_COLOR);
+            let back = p5.color(p5.BACKGROUND_COLOR);
             if( bin[i] === '0' ){
                 back.setAlpha(55);
             }
-            fill( back );
-            noStroke();textSize(size*0.045);
-            text(
+            p5.fill( back );
+            p5.noStroke(); p5.textSize(size*0.045);
+            p5.text(
                 bin[i],
                 x + i * (size) / 16,
                 y + h*0.7,
@@ -138,26 +139,26 @@ class RAM {
                 0.3*h);
         }
 
-        line(2 + x ,
+        p5.line(2 + x ,
             -2 + y + h,
             2 + x ,
             -2 + y + 0.9 * h);
-        line(2 + x + 8 * (size-8) / 16,
+        p5.line(2 + x + 8 * (size-8) / 16,
             -2 + y + h,
             2 + x  + 8 * (size-8) / 16,
             -2 + y + 0.9 * h);
 
-        textSize(size*0.04 ); fill(BACKGROUND_COLOR); noStroke();
-        text(
+        p5.textSize(size*0.04 ); p5.fill(p5.BACKGROUND_COLOR); p5.noStroke();
+        p5.text(
             '0x' + this.memory[index].address,
             x,
             y ,
             size*0.16,
             h*0.25
         );
-        textSize(size*0.08 );   fill('#58b368');
+        p5.textSize(size*0.08 );   p5.fill('#58b368');
 
-        text(
+        p5.text(
             this.inHex ? '0x' + toHex(this.memoryContent[index],2) : this.memoryContent[index],
             x ,
             y ,
@@ -165,17 +166,15 @@ class RAM {
             h*0.75
         );
 
-        pop();
+        p5.pop();
     }
 
-
     scroll(x,y,delta){
-
 
         let d =-delta
         if(x > this.x && x < this.x + this.size && y > this.y && y < this.size*2.2 ){
 
-            let newval = floor(this.slider.val + Math.sign(d)*nitems);
+            let newval = p5.floor(this.slider.val + Math.sign(d)*nitems);
             newval-= newval % 2;
 
             newval = newval < 0 ? 2: newval;
@@ -186,9 +185,4 @@ class RAM {
         }
 
     }
-
-
-
-
-
 }

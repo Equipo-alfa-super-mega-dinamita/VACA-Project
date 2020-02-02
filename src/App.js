@@ -1,28 +1,20 @@
+/* eslint-disable */
+
 import React from 'react';
 import './App.css';
-import Sketch from 'react-p5'
+import P5Wrapper from 'react-p5-wrapper';
+import sketch from './P5/sketch.js'
+
 import InputView from "./Views/Input/InputView";
 
 function App() {
+    //P5_experience();
 
-    const setup = (p5, canvasParent) => {
-        p5.createCanvas(1000,800).parent(canvasParent)
-    };
-
-    const draw = p5 => {
-        p5.background(p5.random(55))
-
-    };
-
-    const preload = () => {
-
-    };
-
-
+    const sk = sketch
   return (
       <React.Fragment>
-          {/*<Sketch setup ={setup} draw = {draw}/>*/}
-          <InputView/>
+          <P5Wrapper sketch = {sk} />
+          {/*<InputView/>*/}
       </React.Fragment>
   );
 }
