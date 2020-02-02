@@ -13,8 +13,8 @@ function App() {
     const sk = sketch
   return (
       <React.Fragment>
-          <P5Wrapper sketch = {sk} />
-          {/*<InputView/>*/}
+          {/*<P5Wrapper sketch = {sk} />*/}
+          {<InputView/>}
       </React.Fragment>
   );
 }
