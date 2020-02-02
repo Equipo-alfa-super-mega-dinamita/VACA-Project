@@ -79,20 +79,23 @@ class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
 
     visitExpression(ctx){
         var firstVal = this.visitMultiplyingExpression(ctx.multiplyingExpression(0));
-        if(ctx.multiplyingExpression(null).length>1){
+        let multiplyingExpressions = ctx.multiplyingExpression(null).length;
+        if(multiplyingExpressions>1){
             //Para sumar las expresiones y regresar el valor numerico total (implementar getRawVal para que sirva)
             //Las sumas no se hacen en la construccion de codigo, sino en ejecución
-            /*var returnValue = firstVal;
-            returnValue.value = this.getRawVal(firstVal);
-            for(var iter = 1;iter<ctx.multiplyingExpression(null).length;iter++){
-                if(ctx.SIGN(iter-1).getText() === "-"){
+            var returnValue = {type:"sum", value:{operands:[],signs:""}};
+            for(var iter = 0;iter<multiplyingExpressions-1;iter++){
+                returnValue.value.signs+=ctx.SIGN(iter).getText();
+                returnValue.value.operands.push(this.visitMultiplyingExpression(ctx.multiplyingExpression(iter)));
+                /*if(ctx.SIGN(iter-1).getText() === "-"){
                     returnValue.value -= this.getRawVal(this.visitMultiplyingExpression(ctx.multiplyingExpression(iter)));
                 }else{
                     returnValue.value += this.getRawVal(this.visitMultiplyingExpression(ctx.multiplyingExpression(iter)));
-                }
+                }*/
             }
-            return returnValue;*/
-            return {type:"sum",value:ctx.getText()};
+            returnValue.value.operands.push(this.visitMultiplyingExpression(ctx.multiplyingExpression(multiplyingExpressions-1)));
+            return returnValue;
+            //return {type:"sum",value:ctx.getText()};
         }else{
             return firstVal;
         }

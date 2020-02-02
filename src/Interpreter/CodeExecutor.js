@@ -195,20 +195,59 @@ class CodeExecutor{
             //todo Obtener valor de variable (aun no definimos variables xd)
             return null;
         }else if(argObj.type === "memory"){
-            if(argObj.valueType === "register"){
-                return this.ramContent[this.getReg(argObj.value)];
-            }else if(argObj.valueType === "number"){
-                return this.ramContent[argObj.value];
-            }else if(argObj.valueType === "pointer"){
-                //TODO valueType === pointer  hacer lo de los offsets
-            }
-
-            return this.ramContent[this.getRawVal({type: argObj.valueType, value:argObj.value})]; //puede estar sirviendo mal
+            return this.ramContent[this.getLogMemoryDir(argObj)]; //Traer contenido del argObj de tipo memory
         }else if(argObj.type === "string"){
             // ????
             return null;
         }else if(argObj.type === "sum"){
             //todo sumar cosas
+            let operands = argObj.value.operands;
+            let signs = argObj.value.signs;
+            let rawSum = this.getRawVal(argObj.value.operands[0]);
+            for(let i=0;i<operands.length-1;i++){
+                if(signs.charAt(i)==='-'){
+                    rawSum -= this.getRawVal(operands[i+1])
+                }else{
+                    rawSum += this.getRawVal(operands[i+1])
+                }
+            }
+            return rawSum;
+        }
+    }
+
+    getLogMemoryDir(argObj){ //argObj debe ser de tipo memory this.ramContent[getLogMemoryDir(argObj)] => referencia de la memoria a la que apunta argObj
+        if(argObj.valueType === "register"){
+            return this.getReg(argObj.value);
+        }else if(argObj.valueType === "number"){
+            return argObj.value;
+        }else if(argObj.valueType === "pointer"){
+            //TODO offsets completo?
+            if(argObj.value === "SP"){
+                return this.SRegisters.SS-this.registers.SP;
+            }else if(argObj.value === "BP"){
+                return this.getReg("BP");
+            }else if(argObj.value === "SI"){
+                return this.SRegisters.DS+this.registers.SI;
+            }else{
+                return this.SRegisters.ES+this.registers.DI;
+            }
+
+        }else if(argObj.valueType === "sum"){
+            let firstOp = argObj.value.operands[0];
+            let sumVal = this.getRawVal({type:"sum",value:argObj.value});
+            if(firstOp.type === "pointer"){
+                if(firstOp.value === "SP"){
+                    return this.SRegisters.SS-sumVal;
+                }else if(firstOp.value === "BP"){
+                    return sumVal;
+                }else if(firstOp.value === "SI"){
+                    return this.SRegisters.DS+sumVal;
+                }else{
+                    return this.SRegisters.ES+sumVal;
+                }
+            }else{
+                return sumVal;
+            }
         }
     }
 
@@ -229,7 +268,7 @@ class CodeExecutor{
                         break;
                     case "memory":
                         //this.ramContent[this.getRawVal(arg1)] = this.getRawVal(arg2); //MOV [100],20  ram[[100]] = 20
-                        this.ramContent[this.getRawVal({type: arg1.valueType, value:arg1.value})] = this.getRawVal(arg2); //ram[100] = 20
+                        this.ramContent[this.getLogMemoryDir(arg1)] = this.getRawVal(arg2); //ram[100] = 20
                         break;
                 }
                 this.registers.IP++;
