@@ -22,7 +22,7 @@ class RAM {
             this.memoryContent[i] = floor(random(2**8));
         }
 
-        this.slider = createSliderV("RAM-Slider", x+ size + 2 + size*0.02, y, 0.1*size , 2.2*size , 2, array_size - nitems*2);
+        this.slider = createSliderV("RAM-Slider", x+ size + 2 + size*0.02, y, 0.1*size , 2.2*size , 2, array_size - nitems*2 + 2);
         this.slider.isInteger = true
         this.slider.setStyle({
             rounding: 0,
@@ -74,11 +74,6 @@ class RAM {
             push();stroke(0); strokeWeight(2); fill(255);textSize(this.size/25);
 
             //console.log(this.memory[index].address)
-            text(this.memory[index-2].address,
-                 this.x - this.size*0.15,
-                this.y + (max-j-1)*h + h*0.75,
-                this.size*0.15,
-                h*0.25);
             pop();
         }
         fill(0); stroke(0);
@@ -179,10 +174,9 @@ class RAM {
 
 
         let d =-delta
-        if(x > this.x && x < this.x + this.size && y > this.y && y < this.size*2 ){
+        if(x > this.x && x < this.x + this.size && y > this.y && y < this.size*2.2 ){
 
             let newval = floor(this.slider.val + Math.sign(d)*nitems);
-
             newval-= newval % 2;
 
             newval = newval < 0 ? 2: newval;

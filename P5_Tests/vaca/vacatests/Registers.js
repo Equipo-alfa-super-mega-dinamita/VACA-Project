@@ -15,7 +15,7 @@ class Registers{
                     x: this.x + 0.05*size,
                     y: this.y + 1.5 *size,
                     col: '#e08f62',
-                    value: false
+                    value: true
                 },
                 'DF':{
                     'name': 'Direction Flag',
@@ -24,7 +24,7 @@ class Registers{
                     x: this.x + 0.235*size,
                     y: this.y + 1.5 *size,
                     col: '#d7c79e',
-                    value: false
+                    value: true
                 },
                 'IF':{
                     'name': 'Interrupt Flag',
@@ -33,7 +33,7 @@ class Registers{
                     x: this.x + 0.42*size,
                     y: this.y + 1.5 *size,
                     col: '#9dab86',
-                    value: false
+                    value: true
                 }
             },
             status:{
@@ -44,7 +44,7 @@ class Registers{
                     x: this.x + 0.05*size,
                     y: this.y + 1.75 *size,
                     col: '#1f4287',
-                    value: false
+                    value: true
                 },
                 'SF':{
                     'name': 'Sign Flag',
@@ -53,7 +53,7 @@ class Registers{
                     x: this.x + 0.235*size,
                     y: this.y + 1.75 *size,
                     col: '#278ea5',
-                    value: false
+                    value: true
                 },
                 'ZF':{
                     'name': 'Zero Flag',
@@ -62,7 +62,7 @@ class Registers{
                     x: this.x + 0.42*size,
                     y: this.y + 1.75 *size,
                     col: '#21e6c1',
-                    value: false
+                    value: true
                 },
                 'AF':{
                     'name': 'Auxiliary Carry Flag',
@@ -71,7 +71,7 @@ class Registers{
                     x: this.x + 0.7*size,
                     y: this.y + 1.75 *size,
                     col: '#c05c7e',
-                    value: false
+                    value: true
                 },
                 'PF':{
                     'name': 'Parity Flag',
@@ -80,7 +80,7 @@ class Registers{
                     x: this.x + 0.885*size,
                     y: this.y + 1.75 *size,
                     col: '#f3826f',
-                    value: false
+                    value: true
                 },
                 'CF':{
                     'name': 'Carry Flag',
@@ -89,13 +89,13 @@ class Registers{
                     x: this.x + 1.07*size,
                     y: this.y + 1.75 *size,
                     col: '#ffb961',
-                    value: false
+                    value: true
                 }
                 
             }
             
         };
-
+        this.currentItem = this.flags['status'].CF;
         this.registers =
             {
                 general: {
@@ -228,9 +228,42 @@ class Registers{
             };
 
         let data = { ...this.flags, ... this.registers};
-        console.log(data)
 
+        for(let type in this.registers){
+            for (let item in this.registers[type]){
+                let register = this.registers[type][item];
+                if(register && !register.ux){
+                    register.ux = uxRect(register.x, register.y, this.size*0.5, this.size*0.2);
+                    register.ux.uxNoFillState = true;
+                    register.ux.uxNoStrokeState = true;
+                    register.ux.uxEvent('click', ()=> {
+                        this.currentItem = register
+                        console.log(register);
+                    })
+                }
+            }
+        }
 
+        for(let type in this.flags){
+            for (let item in this.flags[type]){
+                let flag = this.flags[type][item];
+                if(flag && !flag.ux){
+                    let size = this.size*0.125;
+                    flag.ux = uxEllipse(flag.x + size*0.5,
+                        flag.y + size* 0.79,
+                        size*1.2,
+                        size*1.2   );
+                    flag.ux.uxNoFillState = true;
+
+                    flag.ux.uxNoStrokeState = true;
+                    flag.ux.uxEvent('click', ()=> {
+                        this.currentItem = flag
+                        console.log(flag);
+                    })
+                }
+            }
+
+        }
 
 
     }
@@ -239,14 +272,15 @@ class Registers{
     display() {
         push();colorMode(HSB);
         //REGISTERS
-        stroke(255);
-        noFill();
-        rect(this.x, this.y, this.size*1.25, this.size * 2);
+        noStroke();
+        fill(51,51,51,5);
+        rect(this.x, this.y, this.size*1.25, this.size * 2.4);
         noStroke();
 
         for (let item in this.registers['general']){
-            this.registerDisplay( this.registers['general'][item]);
-        }
+            let register = this.registers['general'][item];
+            this.registerDisplay( register );
+         }
         for (let item in this.registers['instruction']){
             this.registerDisplay( this.registers['instruction'][item]);
         }
@@ -268,7 +302,15 @@ class Registers{
         for (let item in this.flags['status']){
             this.flagDisplay(this.flags['status'][item], this.size*0.125)
         }
-
+        fill(33);
+        let {id, name, description} = this.currentItem;
+        textSize(this.size* 0.0625);
+        text(id + ': ' + name,
+            this.x + this.size*0.05,
+            this.y + this.size*2.025,
+            this.size*1,
+            this.size*0.5
+        );
 
         pop();
     }
@@ -287,7 +329,6 @@ class Registers{
                 size*0.6   );
         noStroke(); fill(value ? col : 'rgba(136,136,136,0.75)');
         textSize(size* 0.65);
-        //stroke(0);
 
         text(id,
           x - size*0.23,
@@ -299,8 +340,6 @@ class Registers{
     }
 
     registerDisplay({x,y,col,id,content}) {
-        //console.log(color)
-
 
         if (content === undefined) return;
         id = id ? id : '';
@@ -335,8 +374,6 @@ class Registers{
             fill(back);
             textSize(size * 0.09);
             textAlign(CENTER, CENTER);
-
-
 
             noStroke();
             text(
@@ -389,10 +426,7 @@ class Registers{
                 size * 0.17);
             textSize(size * 0.10);
 
-
             let hcontent, lcontent;
-
-
 
             hcontent = parseInt(bin.slice(0,4).join(''), 2)
             lcontent = parseInt(bin.slice(4,8).join(''), 2)
@@ -402,7 +436,6 @@ class Registers{
                 y + size * 0.1,
                 size/3,
                 size * 0.17);
-
 
             text(hcontent,
                 x,
@@ -417,11 +450,6 @@ class Registers{
                 y + size * 0.19,
                 size/3,
                 size * 0.17);
-
-
-
-
-
         }
         else
         {
