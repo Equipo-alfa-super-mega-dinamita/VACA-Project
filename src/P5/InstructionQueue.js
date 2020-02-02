@@ -25,7 +25,7 @@ export default  class InstructionQueue{
             }
         this.x = x;
         this.y = y;
-        this.size = size*1.8;
+        this.size = size*1.5;
 
         this.paused = false;
         /*this.playButton = {
@@ -80,11 +80,12 @@ export default  class InstructionQueue{
 
         let up = this.ip - 1;
         p5.fill('#B45EFF');
-        p5.rect(this.x,this.y,this.size*0.2,this.size * 0.14);
-        p5.rect(this.x,this.y,this.size, this.size*0.14*0.1);
-        p5.rect(this.x  ,this.y + this.size*0.14*0.9,this.size, this.size*0.14*0.1);
+        p5.rect(this.x,this.y,this.size*0.2,this.size * 0.14,
+            this.size*0.07,0,0,0
+        );
+        p5.rect(this.x + this.size*0.07,this.y,this.size - this.size*0.07, this.size*0.14*0.1);
+        p5.rect(this.x,this.y + this.size*0.14*0.9,this.size, this.size*0.14*0.1);
         p5.rect(this.x + this.size * 0.985 ,this.y,this.size*0.14*0.1, this.size*0.14);
-
 
         if(up>=0){
 
@@ -120,8 +121,8 @@ export default  class InstructionQueue{
         // Mitad - Actual
 
         p5.fill('#9012FF');
-        p5.rect(this.x,this.y + this.size*0.14,
-            this.size * 0.2,this.size*0.22);
+        p5.rect(this.x ,this.y + this.size*0.14,
+            this.size * 0.2 ,this.size*0.22 );
 
         p5.rect(this.x  ,this.y + this.size*0.14,this.size, this.size*0.22*0.1);
         p5.rect(this.x  ,this.y + this.size*0.22*0.9 + this.size*0.14, this.size, this.size*0.22*0.1);
@@ -135,16 +136,16 @@ export default  class InstructionQueue{
             p5.textSize(this.size*0.04 );
             p5.text(this.instructions[this.ip].address,
                 this.x ,
-                this.y + this.size*0.14,
+                this.y + this.size*0.19,
                 this.size*0.2,
                 this.size*0.05);
 
 
-            //textFont(InstructionsFont);
+            p5.textFont(p5.InstructionsFont);
             p5.textSize(this.size*0.045 );
             p5.text('<+' + this.instructions[this.ip].offset + '>',
                 this.x ,
-                this.y + this.size*0.3,
+                this.y + this.size*0.25,
                 this.size*0.2,
                 this.size*0.05);
             p5.pop();
@@ -167,7 +168,10 @@ export default  class InstructionQueue{
         // Abajo - Posterior
 
         p5.fill('#B45EFF');
-        p5.rect(this.x,this.y + this.size*0.36,this.size*0.2 ,this.size*0.14);
+        p5.rect(this.x,
+            this.y + this.size*0.36,
+            this.size*0.2,
+            this.size*0.14,0,0,0,this.size*0.07);
 
         let down = this.ip+1;
         if(down>=0 && down < this.instructions.length ){
@@ -201,8 +205,17 @@ export default  class InstructionQueue{
         //fill(BACKGROUND_COLOR); textSize(this.size*0.07);
         p5.fill('#B45EFF')
         p5.rect(this.x,this.y +this.size*0.36,this.size, this.size*0.14*0.1);
-        p5.rect(this.x,this.y + this.size*0.14*0.9 +this.size*0.36,this.size, this.size*0.14*0.1);
+        p5.rect(this.x + this.size*0.07,this.y + this.size*0.14*0.9 +this.size*0.36,this.size - this.size*0.07, this.size*0.14*0.1);
         p5.rect(this.x + this.size * 0.985,this.y +this.size*0.36,this.size*0.14*0.1, this.size*0.14);
+
+        p5.rect(
+          this.x + this.size*0.985, this.y, 0.14*this.size,this.size*0.5,
+            0, 0.14*this.size, 0.14*this.size,0);
+        p5.fill('#9012FF');
+        p5.rect(
+            this.x + this.size*0.985, this.y + 0.14*this.size,
+            0.14*this.size,this.size*0.22
+        );
 
 
         p5.pop();

@@ -3,9 +3,11 @@
 import RAM from "./RAM";
 import Registers from "./Registers";
 import InstructionQueue from "./InstructionQueue";
+import ExecutionUnit from "./ExecutionUnit";
 export default function sketch(p5){
 
     let canvas = null
+    let executionUnit;
     let za;
     let gui; //touchgui.js instance
     const DATA_DYPE = 'i';
@@ -28,9 +30,18 @@ export default function sketch(p5){
         p5.textFont(p5.DataFont);
 
         let siiiize = p5.width*0.2;
-        ram =  new RAM(p5,p5.width*0.72 ,20,siiiize,2**16);
+
+
+        executionUnit = new ExecutionUnit(
+            p5,
+            p5.width*0.015,
+            p5.width*0.015,
+            p5.width*0.2
+
+        );
+        /*ram =  new RAM(p5,p5.width*0.72 ,20,siiiize,2**8);
         registers = new Registers(p5,70,20,siiiize);
-        instructions = new InstructionQueue(p5,p5.width/2 - siiiize*0.9, 20, siiiize );
+        instructions = new InstructionQueue(p5,p5.width/2 - siiiize*0.9, 20, siiiize );*/
         za = p5.createAudio('./assets/Za Warudo.mp3');
         za.autoplay(true);
 
@@ -41,11 +52,15 @@ export default function sketch(p5){
 
     p5.draw = function() {
 
-        p5.background(BACKGROUND_COLOR);
+        p5.background(p5.BACKGROUND_COLOR);
+
+        /*
 
         ram.display();
         instructions.display();
         registers.display();
+        */
+        executionUnit.display();
 
 
         //drawGui();
@@ -62,13 +77,21 @@ export default function sketch(p5){
       p5.mousePressed = function() {
         console.log(p5.mouseX, p5.mouseY);
     }
+
+    p5.doubleClicked = function() {
+        p5.BACKGROUND_COLOR = p5.BACKGROUND_COLOR === '#fffbe4' ? '#1c1c34':'#fffbe4'
+    }
+
+    p5.mouseClicked = function() {
+        console.log(p5.mouseX, p5.mouseY);
+        executionUnit.memory.onClick(p5.mouseX, p5.mouseY);
+    }
     p5.windowResized =function() {
         p5.resizeCanvas(p5.windowWidth, 0.5*p5.windowWidth);
     }
 
     p5.mouseWheel = function(event){
-        ram.scroll(p5.mouseX, p5.mouseY, event.delta);
-        instructions.scroll(p5.mouseX, p5.mouseY, event.delta);
+        executionUnit.scroll(p5.mouseX, p5.mouseY, event.delta);
     }
 
 }

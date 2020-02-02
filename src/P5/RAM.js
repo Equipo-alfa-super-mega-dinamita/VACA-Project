@@ -22,8 +22,19 @@ export default class RAM{
             }
             this.memoryContent[i] = p5.floor(p5.random(2**8));
         }
-        this.slider = {val : 2}
-        //this.slider = createSliderV("RAM-Slider", x+ size + 2 + size*0.02, y, 0.1*size , 2.2*size , 2, array_size - nitems*2 + 2);
+        this.slider = {
+            val : 2,
+            x : x + size*1.05,
+            y : y,
+            w : size*0.05,
+            h : size*2.185
+
+        }
+        //this.slider = createSliderV("RAM-Slider",
+        // x+ size + 2 + size*0.02,
+        // y, 0.1*size ,
+        // 2.2*size ,
+        // 2, array_size - nitems*2 + 2);
         /*
         SLIDER - TOUCHGUI LIBRARY
 
@@ -50,8 +61,8 @@ export default class RAM{
 
 
         //setInterval(()=>{    this.slider.val+=1}, 1000)
-        console.log(this.memory)
-        console.log(this.memoryContent)
+        console.log(this.memory);
+        console.log(this.memoryContent);
 
     }
 
@@ -80,6 +91,7 @@ export default class RAM{
         }
         p5.fill(0); p5.stroke(0);
         p5.pop();
+        this.displayScrollbar();
     }
 
     memorySlot(x,y,size, index){
@@ -183,6 +195,48 @@ export default class RAM{
 
 
         }
+    }
+    displayScrollbar(){
 
+        let {x,y,w,h,val} = this.slider;
+
+        p5.push();
+        p5.noStroke();
+        p5.fill('rgba(124,124,124,0.11)')
+        p5.rect(
+            x,
+            y ,
+            w,
+            h
+        );
+
+        let scrollY = p5.map(val ,
+            this.memoryContent.length - nitems*2 + 2, 2,
+            y,
+            y + h
+            );
+        p5.fill('rgba(255,170,102,0.91)');
+        p5.triangle(x- w*0.5, scrollY,
+            x + w, scrollY + 0.6*w, x + w, scrollY - 0.6*w);
+
+
+        p5.push();
+    }
+
+    onClick(ex,ey){
+
+        let {x,y,w,h,val} = this.slider;
+        if( ex > x && ex < x + w && ey > y && ey < y + h){
+
+            this.slider.val = p5.map(
+                ey,
+                y,
+                y + h,
+                this.memoryContent.length - nitems*2 + 2 ,2
+            );
+
+
+
+        }
     }
 }
