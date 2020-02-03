@@ -19,9 +19,6 @@ export default  class InstructionQueue{
                 'SUB':  {
                     col : p5.color('#649bc6')
                 }
-
-
-
             }
         this.x = x;
         this.y = y;

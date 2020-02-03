@@ -10,7 +10,7 @@ export default class Registers{
         this.size = size;
         this.inHex = true;
         this.flags = {
-            control:{
+
                 'TF': {
                     'name': 'Trap Flag',
                     'description': '',
@@ -38,8 +38,8 @@ export default class Registers{
                     col: '#9dab86',
                     value: true
                 }
-            },
-            status:{
+            ,
+
                 'OF':{
                     'name': 'Overflow Flag',
                     'description': '',
@@ -94,17 +94,16 @@ export default class Registers{
                     y: this.y + 1.75 *size,
                     col: '#21e6c1',
                     value: true
-                }
+
 
             }
 
         };
         this.registers = {
-            general: {
                 'AX': {
                     'id': 'AX',
                     'name': 'Accumulator Register',
-                    'description': 'Es el acumulador.',
+                    'description': 'Puede ser dividido en dos registros de 8 bits. Usado para operaciones aritmeticas y logicas.',
                     x: this.x + this.size*0.7,
                     y: this.y + this.size*0.05,
                     col:'#fd5e53',
@@ -113,7 +112,7 @@ export default class Registers{
                 'BX': {
                     'id': 'BX',
                     'name': 'Base Register',
-                    'description': 'Es el registro base.',
+                    'description': 'Puede ser dividido en dos registros de 8 bits. Usado para almacenar el valor del deplazamiento',
                     x: this.x + this.size*0.7,
                     y: this.y + this.size*0.27,
                     col:'#75b79e',
@@ -122,7 +121,7 @@ export default class Registers{
                 'CX': {
                     'id': 'CX',
                     'name': 'Count Register',
-                    'description': 'Es el contador.',
+                    'description': 'Puede ser dividido en dos regisitros de 8. Usado normalmente en ciclos y rotaciones',
                     x: this.x + this.size*0.7,
                     y: this.y + this.size*0.49,
                     col:'#9aceff',
@@ -131,18 +130,18 @@ export default class Registers{
                 'DX': {
                     'id': 'DX',
                     'name': 'Data Register',
-                    'description': '',
+                    'description': 'Puede ser dividido en dos regisitros de 8. Es usado en multiplicación de un puerto de entrada y salida',
                     x: this.x + this.size*0.7,
                     y: this.y + this.size*0.71,
                     col:'#fdd365',
                     content: Math.floor(p5.random(2**8))
                 },
-            },
-            pointer:{
+
+
                 'SP': {
                     'id': 'SP',
                     'name': 'Stack Pointer',
-                    'description': '',
+                    'description': 'Apunta al tope de la pila de memoria.',
                     x: this.x + this.size*0.7,
                     y: this.y + this.size*1.0,
                     col:'#12cad6',
@@ -151,18 +150,18 @@ export default class Registers{
                 'BP': {
                     'id': 'BP',
                     'name': 'Base Pointer',
-                    'description': '',
+                    'description': 'Usado para acceder a los parametros pasados por pila.',
                     x: this.x + this.size*0.7,
                     y: this.y + this.size*1.22,
                     col:'#ccda46',
                     content: Math.floor(p5.random(2**8))
-                }
-            },
-            index:{
+                },
+
+
                 'SI': {
                     'id': 'SI',
                     'name': 'Source Index',
-                    'description': '',
+                    'description': 'Usado en el direccionamiento de punteros de datos.',
                     x: this.x + this.size*0.05,
                     y: this.y + this.size*1.0,
                     col:'#93b5b3',
@@ -171,18 +170,17 @@ export default class Registers{
                 'DI': {
                     'id': 'DI',
                     'name': 'Destination Index',
-                    'description': '',
+                    'description': 'Usado en el direccionamiento de puntero de datos y como destino en operaciones con cadenas.',
                     x: this.x + this.size*0.05,
                     y: this.y + this.size*1.22,
                     col:'#95a7a0',
                     content: Math.floor(p5.random(2**8))
-                }
+
             },
-            segment:{
                 'CS': {
                     'id': 'CS',
                     'name': 'Code Segment',
-                    'description': '',
+                    'description': 'Registra los pointers del segmento de codigo actual. Normalmente trata con las instrucciones',
                     x: this.x + this.size*0.05,
                     y: this.y + this.size*0.05,
                     col:'#3fc5f0',
@@ -191,7 +189,7 @@ export default class Registers{
                 'DS': {
                     'id': 'DS',
                     'name': 'Data Segment',
-                    'description': '',
+                    'description': 'Registra los points del segmento de codigo actual. Normalmente relacionado con las variables',
                     x: this.x + this.size*0.05,
                     y: this.y + this.size*0.27,
                     col:'#42dee1',
@@ -200,7 +198,7 @@ export default class Registers{
                 'SS': {
                     'id': 'SS',
                     'name': 'Stack Segment',
-                    'description': '',
+                    'description': 'Registra los points del segmento de codigo actual. Normalmente relacionado con las operaciones de pila',
                     x: this.x + this.size*0.05,
                     y: this.y + this.size*0.49,
                     col:'#6decb9',
@@ -209,30 +207,28 @@ export default class Registers{
                 'ES': {
                     'id': 'ES',
                     'name': 'Extra Segment',
-                    'description': '',
+                    'description': 'Usado para almacenamiento de datos',
                     x: this.x + this.size*0.05,
                     y: this.y + this.size*0.71,
                     col:'#a1dd70',
                     content: Math.floor(p5.random(2**8))
-                }
             },
-            instruction:{
                 'IP': {
                     'id': 'IP',
                     'name': 'Instruction Pointer',
-                    'description': '',
+                    'description': 'Apunta a la siguiente instrucción a ejecutar',
                     x: this.x + this.size*0.7,
                     y: this.y + this.size*1.5,
                     col:'#ca5fa6',
                     content: Math.floor(p5.random(2**8))
-                }
+
             }
         };
         p5.colorMode(p5.HSB,100);
 
-        this.currentItem = this.flags['status'].CF;
+        this.currentItem = this.flags.CF;
 
-        let data = { ...this.flags, ... this.registers};
+        //let data = { ...this.flags, ... this.registers};
 
     }
 
@@ -270,33 +266,15 @@ export default class Registers{
         p5.fill(51,51,51,5);
         p5.rect(this.x, this.y, this.size*1.25, this.size * 2.4);
         p5.noStroke();
-        for (let item in this.registers['general']){
-            let register = this.registers['general'][item];
+        for (let item in this.registers){
+            let register = this.registers[item];
             this.registerDisplay( register );
         }
-        for (let item in this.registers['instruction']){
-            this.registerDisplay( this.registers['instruction'][item]);
-        }
 
-        for (let item in this.registers['segment']){
-            this.registerDisplay( this.registers['segment'][item]);
+        for (let item in this.flags){
+            let flag = this.flags[item];
+            this.flagDisplay( flag , this.size*0.125);
         }
-        for (let item in this.registers['pointer']){
-            this.registerDisplay( this.registers['pointer'][item]);
-        }
-
-        for (let item in this.registers['index']){
-            this.registerDisplay( this.registers['index'][item]);
-        }
-
-        for (let item in this.flags['control']){
-            this.flagDisplay(this.flags['control'][item], this.size*0.125)
-        }
-        for (let item in this.flags['status']){
-            this.flagDisplay(this.flags['status'][item], this.size*0.125)
-        }
-
-
         let {id, name, description,col} = this.currentItem;
         p5.fill(col);
         p5.textSize(this.size* 0.0625);
@@ -343,8 +321,11 @@ export default class Registers{
         p5.pop();
     }
     registerDisplay({x,y,col,id,content}) {
-        //console.log({x,y,col,id,content});
-        if (content === undefined) return;
+        if (content === undefined) {
+            console.log({x,y,col,id,content})
+            return;
+
+        }
         id = id ? id : '';
         p5.push();
         p5.noStroke();
@@ -520,17 +501,17 @@ export default class Registers{
             relativeY: (ey - this.y)/ this.size,
 
         })*/
-        for (let type in this.registers){
-            for( let rname in this.registers[type]){
-                let {x, y, name} = this.registers[type][rname];
+
+            for( let rname in this.registers){
+                let {x, y, name} = this.registers[rname];
                 let w = this.size* 0.5;
                 let h = this.size* 0.2;
 
                 if( ex > x && ex < x + w && ey > y && ey < y + h){
-                    this.currentItem = this.registers[type][rname];
+                    this.currentItem = this.registers[rname];
                 }
             }
-        }
+
         for (let type in this.flags){
             //console.log(this.flags);
 
@@ -539,15 +520,15 @@ export default class Registers{
             size*1.2,
             size*1.2*/
             let size = this.size*0.125;
-            for( let rname in this.flags[type]){
-                let {x, y, name} = this.flags[type][rname];
+            for( let rname in this.flags){
+                let {x, y, name} = this.flags[rname];
                 x +=  size*0.5;
                 y +=  size*0.79;
                 let r = this.size* 0.075;
 
                 if( (ex - x)**2 + (ey - y)**2 < (r)*(r)){
-                    this.currentItem = this.flags[type][rname];
-                    this.flags[type][rname].value = !this.flags[type][rname].value;
+                    this.currentItem = this.flags[rname];
+                    this.flags[rname].value = !this.flags[rname].value;
                 }
             }
         }

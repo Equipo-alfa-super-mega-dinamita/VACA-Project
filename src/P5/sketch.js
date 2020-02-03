@@ -45,7 +45,9 @@ export default function sketch(p5){
         za = p5.createAudio('./assets/Za Warudo.mp3');
         executionUnit.display();
         //za.autoplay(true);
-        //p5.noLoop();
+        //p5.noLoop();}
+
+        p5.frameRate(20);
 
     }
     let testCount = 0;
