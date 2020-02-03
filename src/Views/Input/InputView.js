@@ -25,14 +25,23 @@ class InputView extends React.Component{
         "MOV [DI], AX    ;Guardar el resultado de 16 bits en memoria\n" +
         "HLT             ;Terminar el programa";
 
-    testValue = "MOV AX, 100\n" +
-        "MOV [AX], 100";
+    testValue = "MOV BX, 5\n" +
+        "MOV CX,BX\n" +
+        "DEC CX\n" +
+        "MOV AX, 0001\n" +
+        "MOV DX, 0000\n" +
+        "dir:MUL BX\n" +
+        "DEC BX\n" +
+        "LOOP dir\n" +
+        "MOV [0600], AX\n" +
+        "MOV [0601], DX\n" +
+        "HLT";
 
     constructor(props){
         super(props);
         this.state = {
             codeString : this.testValue,
-            annotations : [{row: 1, column:1,type:'error',text:'Check your code for errors before executing it'}],
+            annotations : [{row: 0, column:1,type:'error',text:'Check your code for errors before executing it'}],
             validCode:false,
             aceState:null
         };

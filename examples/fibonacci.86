@@ -1,0 +1,10 @@
+MOV CX, 10     ;Termino décimo de la suceción de fibonacci
+MOV AX, 0;
+MOV BX, 1;
+lbl: NOP
+MOV DX, BX
+ADD BX, AX
+MOV AX, DX
+LOOP lbl
+MOV DX BX       ;Respuesta estará en DX
+HLT

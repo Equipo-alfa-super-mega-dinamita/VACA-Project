@@ -27,7 +27,7 @@ class CodeExecutor {
      */
 
     labelContents = {};
-    ramContent = new RAMContent();
+    ramContent;
     memoryPos = 0;
     execute = true;
     codeArray;
@@ -67,62 +67,98 @@ class CodeExecutor {
         };
     }
 
-    setReg(value, reg) {
+    start() {
+        while (this.execute && this.registers.IP < this.SRegisters.DS) {
+            let instruction = this.codeArray[this.registers.IP];
+            //todo ejecutar instruccion
+            this.execInstruction(instruction);
+            console.log(instruction.instrText);
+            console.log(this.registers);
+            console.log(this.ramContent)
+        }
+    }
 
+    setReg(value, reg) {
+        if(reg.charAt(1)==='L'||reg.charAt(1)==='H'){
+            this.setRegHalf(value,reg);
+        }
+        let valMod = value % 65536;
         switch (reg) {
             case "AX":
-                this.registers.AX = value;
+                this.registers.AX = valMod;
                 break;
             case "BX":
-                this.registers.BX = value;
+                this.registers.BX = valMod;
                 break;
             case "CX":
-                this.registers.CX = value;
+                this.registers.CX = valMod;
                 break;
             case "DX":
-                this.registers.DX = value;
+                this.registers.DX = valMod;
                 break;
             case "SP":
-                this.registers.SP = value;
+                this.registers.SP = valMod;
                 break;
             case "BP":
-                this.registers.BP = value;
+                this.registers.BP = valMod;
                 break;
             case "SI":
-                this.registers.SI = value;
+                this.registers.SI = valMod;
                 break;
             case "DI":
-                this.registers.DI = value;
+                this.registers.DI = valMod;
                 break;
             case "CS":
-                this.SRegisters.CS = value;
+                this.SRegisters.CS = valMod;
                 break;
             case "DS":
-                this.SRegisters.DS = value;
+                this.SRegisters.DS = valMod;
                 break;
             case "SS":
-                this.SRegisters.SS = value;
+                this.SRegisters.SS = valMod;
                 break;
             case "ES":
-                this.SRegisters.ES = value;
+                this.SRegisters.ES = valMod;
                 break;
         }
-        this.SRegisters.AX = value
+        this.SRegisters.AX = valMod
+    }
+
+    setRegHalf(value,reg){
+        let custVal = 0;
+        let firstChar = reg.charAt(0);
+        let [msb,lsb] = this.splitNumber(this.getReg(firstChar+'X'));
+        if(reg.charAt(1)==='L'){
+            custVal = this.rebuildNumber(value,msb);
+        }else{
+            custVal = this.rebuildNumber(lsb,value);
+        }
+        this.setReg(custVal,firstChar+'X');
     }
 
     getReg(reg) {
         let ans = 0;
+        let c =reg.charAt(0);
+        let val;
         switch (reg) {
             case "AX":
+            case "AL":
+            case "AH":
                 ans = this.registers.AX;
                 break;
             case "BX":
+            case "BL":
+            case "BH":
                 ans = this.registers.BX;
                 break;
             case "CX":
+            case "CL":
+            case "CH":
                 ans = this.registers.CX;
                 break;
             case "DX":
+            case "DL":
+            case "DH":
                 ans = this.registers.DX;
                 break;
             case "SP":
@@ -150,26 +186,28 @@ class CodeExecutor {
                 ans = this.SRegisters.ES;
                 break;
         }
-        return ans;
+        if(reg.charAt(1) === 'L'){
+            return this.splitNumber(ans)[1];
+        }else if(reg.charAt(1) === 'H'){
+            return this.splitNumber(ans)[0];
+        }else {
+            return ans;
+        }
     }
+
 
 
     setStackPos(index, value) {
         this.ramContent[index] = value;
     }
 
-    start() {
-        while (this.execute && this.registers.IP < this.SRegisters.DS) {
-            let instruction = this.codeArray[this.registers.IP];
-            //todo ejecutar instruccion
-            this.execInstruction(instruction);
-            console.log(this.registers);
-            console.log(this.ramContent)
-        }
-    }
-
     splitNumber(number) {
         let lsb = (number & 0xFF), msb = (number >> 8) & 0xff;
+        return [msb, lsb];
+    }
+
+    splitNumber16(number) {
+        let lsb = (number & 0xFFFF), msb = (number >> 16) & 0xffff;
         return [msb, lsb];
     }
 
@@ -184,8 +222,13 @@ class CodeExecutor {
         ans += block1;
         return ans;
     }
+
     stringBitsNum(num){
         return (num).toString(2).padStart(8,'0');
+    }
+
+    getIntFromBitsString(str){
+        return parseInt(str, 2);
     }
 
 
@@ -229,6 +272,7 @@ class CodeExecutor {
         } else if (argObj.valueType === "pointer") {
             //TODO offsets completo?
             if (argObj.value === "SP") {
+                if((this.SRegisters.SS - this.registers.SP)<0) return this.SRegisters.SS;
                 return this.SRegisters.SS - this.registers.SP;
             } else if (argObj.value === "BP") {
                 return this.getReg("BP");
@@ -262,6 +306,7 @@ class CodeExecutor {
         let args = instr.args;
         let [msb, lsb] = [-1, -1];
         switch (instr.opCode) {
+            //--- Data movement operations ---
             case "MOV":
                 let arg1 = instr.args[0];
                 let arg2 = instr.args[1];
@@ -276,7 +321,6 @@ class CodeExecutor {
                         }
                         break;
                     case "memory":
-                        //this.ramContent[this.getRawVal(arg1)] = this.getRawVal(arg2); //MOV [100],20  ram[[100]] = 20
                         this.ramContent[this.getLogMemoryDir(arg1)] = this.getRawVal(arg2); //ram[100] = 20
                         break;
                 }
@@ -322,6 +366,95 @@ class CodeExecutor {
                 this.registers.IP++;
                 break;
 
+            case "LEA":
+                if(args[0].type === "register" && args[1].type === "memory"){
+                    this.setReg(this.getLogMemoryDir(args[1]), args[0].value);
+                }
+                this.registers.IP++;
+                break;
+
+            case "INC":
+                    if(args[0].type === "register"){
+                        this.setReg(this.getReg(args[0].value)+1,args[0].value);
+                    }else if(args[0].type === "memory"){
+                        let incDir = this.getLogMemoryDir(args[0]);
+                        this.ramContent[incDir]++;
+                    }else{
+                        //TODO error
+                    }
+                this.registers.IP++;
+                break;
+
+            case "DEC":
+                if(args[0].type === "register"){
+                    this.setReg(this.getReg(args[0].value)-1,args[0].value);
+                }else if(args[0].type === "memory"){
+                    let incDir = this.getLogMemoryDir(args[0]);
+                    this.ramContent[incDir]--;
+                }else{
+                    //TODO error
+                }
+                this.registers.IP++;
+                break;
+
+            case "ADD":
+                let addResult = this.getRawVal(args[0]) + this.getRawVal(args[1]);
+                if(addResult === 0){
+                    this.flags.ZF = 1;
+                }
+                if(addResult){
+
+                }
+                switch(args[0].type){
+                    case "register":
+                        //this.setReg(addResult, args[0].value);
+                        if(args[1].type === "register"){
+                            //16 bits ambos operandos
+                            this.setReg(addResult,args[0].value);
+                        }else if(args[1].type === "memory"){
+                            //16 + 8 bits
+                            this.setReg(addResult,args[0].value);
+                        }else if(args[1].type === "number"){
+                            this.setReg(addResult,args[0].value);
+                        }
+                        break;
+
+                    case "memory":
+                        this.ramContent[this.getLogMemoryDir(args[0])] = addResult;
+                        break;
+                }
+                this.registers.IP++;
+                break;
+
+            case "SUB":
+                let subResult = this.getRawVal(args[0]) - this.getRawVal(args[1]);
+                if(subResult === 0){
+                    this.flags.ZF = 1;
+                }
+                if(subResult){
+
+                }
+                switch(args[0].type){
+                    case "register":
+                        //this.setReg(addResult, args[0].value);
+                        if(args[1].type === "register"){
+                            //16 bits ambos operandos
+                            this.setReg(subResult,args[0].value);
+                        }else if(args[1].type === "memory"){
+                            //16 + 8 bits
+                            this.setReg(subResult,args[0].value);
+                        }else if(args[1].type === "number"){
+                            this.setReg(subResult,args[0].value);
+                        }
+                        break;
+
+                    case "memory":
+                        this.ramContent[this.getLogMemoryDir(args[0])] = addResult;
+                        break;
+                }
+                this.registers.IP++;
+                break;
+
             case "DIV":
                 let myVarAux = this.getRawVal(args[0]);
                 if (myVarAux < 256) {
@@ -329,7 +462,6 @@ class CodeExecutor {
                     lsb = Math.abs(this.getReg("AX") / this.getRawVal(args[0])>>0); //AL
                     msb = Math.abs(this.getReg("AX") % this.getRawVal(args[0])); //AH
                     this.setReg(this.rebuildNumber(lsb,msb), "AX");
-
                 } else {
                     //word
                     let num = this.rebuildNumber16(this.getReg("AX"), this.getReg("DX"));
@@ -338,18 +470,46 @@ class CodeExecutor {
                 }
                 this.registers.IP++;
                 break;
-            case "INC":
+
+            case "MUL":
+                let mulValue;
+                if(args[0].type === "register"){
+                    if(args[0].value.charAt(1) === 'L' || args[0].value.charAt(1) === 'H'){ //byte
+                        this.setReg(this.getRawVal(args[0])*this.getReg("AL"),"AX");
+                    }else{  //word
+                        mulValue = this.splitNumber16(this.getRawVal(args[0])*this.getReg("AX"));
+                        this.setReg(mulValue[0],"DX");
+                        this.setReg(mulValue[1],"AX");
+                    }
+                }else if(args[0].type === "memory"){
+                    //siempre byte
+                    this.setReg(this.getRawVal(args[0])*this.getReg("AL"),"AX");
+                }
+                this.registers.IP++;
+                break;
+
+            case "LOOP":
+                if(this.getReg("CX")>0){
+                    this.setReg(this.getReg("CX")-1,"CX");
+                    this.registers.IP = this.labelContents[args[0].value];
+                }else{
+                    this.registers.IP++;
+                }
+                break;
+
+            case "NOP":
                 this.registers.IP++;
                 break;
 
             case "HLT":
                 this.execute = false;
                 break;
+
+            default:
+                this.registers.IP++;
         }
         //Algo que se haga al final de todas las instrucciones
-
     }
-
 }
 
 export default CodeExecutor;
