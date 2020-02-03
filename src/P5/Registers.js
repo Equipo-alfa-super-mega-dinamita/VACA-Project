@@ -53,27 +53,28 @@ export default class Registers{
                     'name': 'Sign Flag',
                     'description': '',
                     id: 'SF',
-                    x: this.x + 0.235*size,
+
+                    x: this.x + 0.7*size,
                     y: this.y + 1.75 *size,
-                    col: '#278ea5',
+                    col: '#c05c7e',
                     value: true
                 },
                 'ZF':{
                     'name': 'Zero Flag',
                     'description': '',
                     id: 'ZF',
-                    x: this.x + 0.42*size,
+                    x: this.x + 1.07*size,
                     y: this.y + 1.75 *size,
-                    col: '#21e6c1',
+                    col: '#ffb961',
                     value: true
                 },
                 'AF':{
                     'name': 'Auxiliary Carry Flag',
                     'description': '',
                     id: 'AF',
-                    x: this.x + 0.7*size,
+                    x: this.x + 0.235*size,
                     y: this.y + 1.75 *size,
-                    col: '#c05c7e',
+                    col: '#278ea5',
                     value: true
                 },
                 'PF':{
@@ -89,9 +90,9 @@ export default class Registers{
                     'name': 'Carry Flag',
                     'description': '',
                     id: 'CF',
-                    x: this.x + 1.07*size,
+                    x: this.x + 0.42*size,
                     y: this.y + 1.75 *size,
-                    col: '#ffb961',
+                    col: '#21e6c1',
                     value: true
                 }
 
@@ -294,8 +295,10 @@ export default class Registers{
         for (let item in this.flags['status']){
             this.flagDisplay(this.flags['status'][item], this.size*0.125)
         }
-        p5.fill(33);
-        let {id, name, description} = this.currentItem;
+
+
+        let {id, name, description,col} = this.currentItem;
+        p5.fill(col);
         p5.textSize(this.size* 0.0625);
         p5.textFont(p5.InstructionsFont);
         p5.textAlign(p5.LEFT, p5.TOP);
@@ -306,11 +309,36 @@ export default class Registers{
             this.size*0.5
         );
         p5.textSize(this.size* 0.03725);
+        p5.fill('rgba(100,100,100,0.7)');
         p5.text(description,
             this.x + this.size*0.05,
             this.y + this.size*2.125,
             this.size*0.5,
             this.size*0.5
+        );
+
+
+        p5.translate(this.x - 0.075*this.size, this.y + this.size*0.9 );
+        p5.rotate( - p5.PI / 2);
+        p5.noStroke();
+        //p5.rect(0,0,this.size*0.9,0.1*this.size);
+        p5.textSize(this.size* 0.0675);
+        p5.textFont(p5.InstructionsFont);
+        p5.text('Segmento',
+            0,0,this.size*0.9,0.1*this.size
+        );
+        p5.translate(0,this.size*0.65);
+        p5.text('General',
+            0,0,this.size*0.9,0.1*this.size
+        );
+        p5.translate(-this.size*0.5,0);
+        p5.text('Pointer',
+            0,0,this.size*0.9,0.1*this.size
+        );
+
+        p5.translate(0, - this.size*0.65);
+        p5.text('Index',
+            0,0,this.size*0.9,0.1*this.size
         );
         p5.pop();
     }
@@ -344,6 +372,10 @@ export default class Registers{
                         x + i * size / 16,
                         y + size * 0.41);
             }
+            p5.line(x - size*0.0025 ,
+                y + size * 0.325,
+                x + size+ size*0.0025,
+                y + size * 0.325);
             p5.push();
 
             let back = p5.color(p5.BACKGROUND_COLOR);
@@ -382,7 +414,8 @@ export default class Registers{
             p5.push();
             p5.rectMode(p5.RADIUS);
             p5.rect(x + size * 0.5,
-                y + h*0.35,size * 0.15, h*0.35
+                y + h*0.35,size * 0.15, h*0.35,
+                0,0,size * 0.1,size * 0.1
             );
             p5.pop();
             p5.fill(p5.BACKGROUND_COLOR);
@@ -436,6 +469,7 @@ export default class Registers{
                 y + size * 0.275,
                 x + 8 * size / 16,
                 y + size * 0.41);
+
         }
         else
         {
@@ -471,6 +505,7 @@ export default class Registers{
             content.toString(16).padStart('0', 2);
 
 
+
         }
         p5.pop();
 
@@ -479,6 +514,12 @@ export default class Registers{
     }
 
     onClick(ex,ey){
+        /*console.log( {ex,ey, x: ex - this.x , y:  ey - this.y
+        ,
+            relativeX: (ex - this.x)/ this.size,
+            relativeY: (ey - this.y)/ this.size,
+
+        })*/
         for (let type in this.registers){
             for( let rname in this.registers[type]){
                 let {x, y, name} = this.registers[type][rname];

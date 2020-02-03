@@ -19,35 +19,7 @@ export default class RAM{
             w : size*0.05,
             h : size*2.185
 
-        }
-        //this.slider = createSliderV("RAM-Slider",
-        // x+ size + 2 + size*0.02,
-        // y, 0.1*size ,
-        // 2.2*size ,
-        // 2, array_size - nitems*2 + 2);
-        /*
-        SLIDER - TOUCHGUI LIBRARY
-
-        this.slider.isInteger = true
-        this.slider.setStyle({
-            rounding: 0,
-            strokeWeight: 0,
-            trackWidth: 0.1,
-
-            fillBg: color('rgba(255,255,255,0)'),
-            fillBgActive: color('rgba(255,255,255,0)'),
-            fillBgHover: color('rgba(255,255,255,0)'),
-
-            fillHandle: color('#58b368'),
-            fillTrack: color('#275108'),
-
-            fillHandleHover: color('#b3ff49'),
-            fillTrackHover: color('#3f6038'),
-
-            fillTrackActive: color('#aaaaaa'),
-            fillHandleActive: color('#e7e7e7')
-
-        });*/
+        };
 
 
         //setInterval(()=>{    this.slider.val+=1}, 1000)
@@ -223,7 +195,11 @@ export default class RAM{
                 y + h,
                 this.cpu.memoryContent.length - nitems*2 + 2 ,2
             );
-
         }
+
     }
+
+
+
+
 }

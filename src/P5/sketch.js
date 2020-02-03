@@ -43,8 +43,9 @@ export default function sketch(p5){
         registers = new Registers(p5,70,20,siiiize);
         instructions = new InstructionQueue(p5,p5.width/2 - siiiize*0.9, 20, siiiize );*/
         za = p5.createAudio('./assets/Za Warudo.mp3');
-        za.autoplay(true);
-
+        executionUnit.display();
+        //za.autoplay(true);
+        //p5.noLoop();
 
     }
     let testCount = 0;
@@ -52,46 +53,45 @@ export default function sketch(p5){
 
     p5.draw = function() {
 
-        p5.background(p5.BACKGROUND_COLOR);
-
+        executionUnit.cpuCycle();
         /*
 
         ram.display();
         instructions.display();
         registers.display();
         */
-        executionUnit.display();
+        //
 
 
         //drawGui();
         //ram.memorySlot(p5.mouseX, p5.mouseY,testCount, 0);
-        p5.text(
-            p5.frameRate(),
-            p5.mouseX,
-            p5.mouseY
 
-        );
-
-    }
+    };
 
       p5.mousePressed = function() {
-        console.log(p5.mouseX, p5.mouseY);
-    }
+        //console.log(p5.mouseX, p5.mouseY);
+    };
 
-    p5.doubleClicked = function() {
-        p5.BACKGROUND_COLOR = p5.BACKGROUND_COLOR === '#fffbe4' ? '#1c1c34':'#fffbe4'
-    }
 
     p5.mouseClicked = function() {
-        console.log(p5.mouseX, p5.mouseY);
+        //console.log(p5.mouseX, p5.mouseY);
         executionUnit.onClick(p5.mouseX, p5.mouseY);
-    }
+    };
+
     p5.windowResized =function() {
         p5.resizeCanvas(p5.windowWidth, 0.5*p5.windowWidth);
     }
 
     p5.mouseWheel = function(event){
         executionUnit.scroll(p5.mouseX, p5.mouseY, event.delta);
+    }
+    p5.keyPressed = function(){
+
+        if(p5.key === 'r'){
+            p5.BACKGROUND_COLOR = p5.BACKGROUND_COLOR === '#fffbe4' ? '#1c1c34':'#fffbe4'
+            executionUnit.display();
+
+        }
     }
 
 }

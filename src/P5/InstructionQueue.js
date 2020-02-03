@@ -80,12 +80,12 @@ export default  class InstructionQueue{
 
         let up = this.ip - 1;
         p5.fill('#B45EFF');
-        p5.rect(this.x,this.y,this.size*0.2,this.size * 0.14,
+        p5.rect(this.x,this.y,this.size*0.2 ,this.size * 0.14,
             this.size*0.07,0,0,0
         );
-        p5.rect(this.x + this.size*0.07,this.y,this.size - this.size*0.07, this.size*0.14*0.1);
-        p5.rect(this.x,this.y + this.size*0.14*0.9,this.size, this.size*0.14*0.1);
-        p5.rect(this.x + this.size * 0.985 ,this.y,this.size*0.14*0.1, this.size*0.14);
+        p5.rect(this.x + this.size*0.07 ,this.y,this.size - this.size*0.07 + this.size*0.215, this.size*0.14*0.1);
+        p5.rect(this.x,this.y + this.size*0.14*0.9,this.size + this.size*0.215, this.size*0.14*0.1);
+        p5.rect(this.x + this.size * 0.985 + this.size*0.215 ,this.y,this.size*0.14*0.1, this.size*0.14);
 
         if(up>=0){
 
@@ -112,7 +112,7 @@ export default  class InstructionQueue{
 
             this.opDisplay(this.x + this.size * 0.2,
                 this.y + this.size*0.14*0.1,
-                this.size*0.785,
+                this.size,
                 this.size*0.14*0.8,
                 this.instructions[up]);
 
@@ -124,9 +124,9 @@ export default  class InstructionQueue{
         p5.rect(this.x ,this.y + this.size*0.14,
             this.size * 0.2 ,this.size*0.22 );
 
-        p5.rect(this.x  ,this.y + this.size*0.14,this.size, this.size*0.22*0.1);
-        p5.rect(this.x  ,this.y + this.size*0.22*0.9 + this.size*0.14, this.size, this.size*0.22*0.1);
-        p5.rect(this.x + this.size * 0.985  ,this.y + this.size*0.14,this.size*0.14*0.1, this.size*0.22);
+        p5.rect(this.x  ,this.y + this.size*0.14,this.size + this.size*0.215, this.size*0.22*0.1);
+        p5.rect(this.x  ,this.y + this.size*0.22*0.9 + this.size*0.14, this.size + this.size*0.215, this.size*0.22*0.1);
+        p5.rect(this.x + this.size * 0.985   + this.size*0.215,this.y + this.size*0.14,this.size*0.14*0.1, this.size*0.22);
 
 
         if(this.ip>=0 ){
@@ -157,7 +157,7 @@ export default  class InstructionQueue{
 
             this.opDisplay(this.x + this.size * 0.2,
                 this.y + this.size* 0.16,
-                this.size*0.785,
+                this.size,
                 this.size*0.22*0.8,
                 this.instructions[this.ip]);
 
@@ -196,7 +196,7 @@ export default  class InstructionQueue{
 
             this.opDisplay(this.x + this.size * 0.2,
                 this.y + this.size* 0.374,
-                this.size*0.785,
+                this.size,
                 this.size*0.14*0.8,
                 this.instructions[down]);
 
@@ -204,16 +204,16 @@ export default  class InstructionQueue{
         }
         //fill(BACKGROUND_COLOR); textSize(this.size*0.07);
         p5.fill('#B45EFF')
-        p5.rect(this.x,this.y +this.size*0.36,this.size, this.size*0.14*0.1);
-        p5.rect(this.x + this.size*0.07,this.y + this.size*0.14*0.9 +this.size*0.36,this.size - this.size*0.07, this.size*0.14*0.1);
-        p5.rect(this.x + this.size * 0.985,this.y +this.size*0.36,this.size*0.14*0.1, this.size*0.14);
+        p5.rect(this.x  ,this.y +this.size*0.36,this.size+ this.size*0.215, this.size*0.14*0.1);
+        p5.rect(this.x + this.size*0.07 ,this.y + this.size*0.14*0.9 +this.size*0.36,this.size - this.size*0.07 + this.size*0.215, this.size*0.14*0.1);
+        p5.rect(this.x + this.size * 0.985 + this.size*0.215,this.y +this.size*0.36,this.size*0.14*0.1 , this.size*0.14);
 
         p5.rect(
-          this.x + this.size*0.985, this.y, 0.14*this.size,this.size*0.5,
+          this.x + this.size*0.985 + this.size*0.215, this.y, 0.14*this.size,this.size*0.5,
             0, 0.14*this.size, 0.14*this.size,0);
         p5.fill('#9012FF');
         p5.rect(
-            this.x + this.size*0.985, this.y + 0.14*this.size,
+            this.x + this.size*0.985 + this.size*0.215, this.y + 0.14*this.size,
             0.14*this.size,this.size*0.22
         );
 
@@ -275,7 +275,7 @@ export default  class InstructionQueue{
     }
     scroll(x,y,delta){
         let d =delta
-        if(x > this.x && x < this.x + this.size && y > this.y && y < this.size*0.5 ){
+        if(x > this.x && x < this.x + this.size*1.215 && y > this.y && y < this.size*0.5 ){
             let newval = this.ip + Math.sign(d);
             newval = newval < 0 ? 0: newval;
             newval = newval > this.instructions.length - 1 ? this.instructions.length - 1 : newval;
