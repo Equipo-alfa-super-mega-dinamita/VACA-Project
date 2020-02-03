@@ -10,11 +10,12 @@ import InputView from "./Views/Input/InputView";
 function App() {
     //P5_experience();
 
-    const sk = sketch
+    const [processed, setProcessed] = React.useState(null);
+    const sk = sketch;
   return (
       <React.Fragment>
-          {<P5Wrapper sketch = {sk} />}
-          {/*<InputView/>*/}
+          {processed!=null?<P5Wrapper sketch = {sk} proc={processed}/>:<div/>}
+          {processed==null?<InputView startAnim={(pro)=>setProcessed(pro)}/>:<div/>}
       </React.Fragment>
   );
 }

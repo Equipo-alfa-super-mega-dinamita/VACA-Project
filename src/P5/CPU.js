@@ -15,20 +15,27 @@ export default class CPU{
 
         this.lastInstruction = () =>{};
         this.queue = [
-             () => {this.byteDisplay( {x: x +w*0.25, y: y+h*0.125, value: 15000, col: '#e99aff' , size : w/2} , 'byte')}
+            () => {this.byteDisplay( {x: x +w*0.25, y: y+h*0.125, value: 15000, col: '#e99aff' , size : w/2} , 'byte')}
             ,() => {this.byteDisplay( {x: x +w*0.25, y: y+h*0.225, value: 15000, col: '#e99aff' , size : w/2} , 'byte')}
             ,() => {this.byteDisplay( {x: x +w*0.25, y: y+h*0.325, value: 15000, col: '#e99aff' , size : w/2} , 'byte')}
             ,() => {this.byteDisplay( {x: x +w*0.25, y: y+h*0.425, value: 15000, col: '#e99aff' , size : w/2} , 'byte')}
-            ,() => {this.byteDisplay( {x: x +w*0.25, y: y+h*0.525, value: 15000, col: '#e99aff' , size : w/2} , 'byte');this.active = false;}
+            ,() => {this.byteDisplay( {x: x +w*0.25, y: y+h*0.525, value: 15000, col: '#e99aff' , size : w/2} , 'byte');this.active = false;},
         ];
-        let inst = this.instructionAnimation('sub',
+        let inst = this.instructionAnimation('SUB',
             {
                 a: 9, b: 50,
-                    destination:{ type: 'register', id: 'BP'},
+                    destination:{ type: 'register', id: 'AX'},
                     source:{type: 'number', value: 5}
                 }
         );
-        this.queue = this.queue.concat(inst);
+        let inst2 = this.instructionAnimation('MOV',
+            {
+                a: 9, b: 50,
+                destination:{ type: 'register', id: 'BX'},
+                source:{type: 'memory', index: 5}
+            }
+        );
+        this.queue = this.queue.concat(inst).concat(inst2);
         this.active = false;
         this.button =
         {
@@ -101,7 +108,7 @@ export default class CPU{
         let by = this.button.y;
         let r = h * 0.0875;
         if( (ex - bx)**2 + (ey - by)**2 < (r)*(r)){
-            if(this.active) this.active = false;
+            if(!this.active) this.active = true;
         }
         this.display();
     }
@@ -155,7 +162,7 @@ export default class CPU{
                     case "memory":
                         sourceData = {index: source.index,x:x + w*0.5,y:y + h*0.1};
                         sourceDisplay = this.memoryDisplay;
-                        sourceContent = eu.registersComponent.registers[source.id].content;
+                        sourceContent = eu.memoryContent[source.index];
                         break;
                     case "number":
                         sourceData = {value: source.value, x:x + w*0.5, y:y + h*0.1};

@@ -2,7 +2,7 @@ let p5;
 export default  class InstructionQueue{
 
 
-    constructor(p5Parent, x,y,size) {
+    constructor(p5Parent, x,y,size,instructions) {
 
         p5 = p5Parent;
         this.opcodes =
@@ -36,33 +36,7 @@ export default  class InstructionQueue{
 
         this.inHex = true;
         this.ip = 0;
-        this.instructions =
-            [
-                {
-                    address: '0x04001',
-                    offset: 1,
-                    op: 'MOV',
-                    operands: ['AX', 'BX']
-                },
-                {
-                    address: '0x04003',
-                    offset: 3,
-                    op: 'CALL',
-                    operands: ['RIP[0x23]', '100', '100', '100', '100', '100', '100']
-                },
-                {
-                    address: '0x0400f',
-                    offset: 15,
-                    op: 'JMP',
-                    operands: ['LABEL_A']
-                },
-                {
-                    address: '0x0401a',
-                    offset: 26,
-                    op: 'SUB',
-                    operands: ['AX' , '100']
-                }
-            ];
+        this.instructions =instructions;
 
     }
 
@@ -240,9 +214,9 @@ export default  class InstructionQueue{
         for( let i = 0; i< operands.length; i++) {
             p5.fill(51);
 
-            bounds = p5.textFont().textBounds(operands[i], 0, 0);
+            bounds = p5.textFont().textBounds(operands[i].text, 0, 0);
             //rect(x + cux , y , bounds.w + w*0.05 , h*);
-            p5.text(operands[i],
+            p5.text(operands[i].text,
                 cux , y , bounds.w + 1, h * 1.5);
 
             p5.stroke(0);

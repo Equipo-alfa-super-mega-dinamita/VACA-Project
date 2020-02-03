@@ -63,6 +63,9 @@ class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
         //console.log(args);
         codeObj.instrText = opStr+argsStr;
         codeObj.opCode = opStr.toUpperCase();
+        if(!args){
+            args = [];
+        }
         codeObj.args = args;
         //Guardar instrucción en memoria
         this.storeInstructionInMemory(opStr,args);
@@ -111,6 +114,7 @@ class CodeBuilderVisitor extends asm8086Visitor.asm8086Visitor{
 
     visitArgument(ctx){
         let argObj = {};
+        argObj.text = ctx.getText();
         if(ctx.number()){
             argObj.type = "number";
             argObj.value = parseInt(ctx.number().getText());

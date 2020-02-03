@@ -4,6 +4,7 @@ import RAM from "./RAM";
 import Registers from "./Registers";
 import InstructionQueue from "./InstructionQueue";
 import ExecutionUnit from "./ExecutionUnit";
+import CodeExecutor from "../Interpreter/CodeExecutor";
 export default function sketch(p5){
 
     let canvas = null
@@ -15,12 +16,23 @@ export default function sketch(p5){
     //let BACKGROUND_COLOR = '#ffffff';
     let backgroundTest = 0;
     let ram,registers,instructions;
+    let codeExecutor;
+    let visualInstrArray;
 
     p5.preload = function(){
         p5.DataFont = p5.loadFont('./assets/TypoGraphica_demo.otf');
         p5.InstructionsFont = p5.loadFont('./assets/KGSecondChancesSolid.ttf');
 
-    }
+    };
+
+    p5.myCustomRedrawAccordingToNewPropsHandler = function(props){
+        if(props.proc){
+            codeExecutor = codeExecutor = new CodeExecutor(props.proc);
+            visualInstrArray = props.proc.codeArray.map(function(x,index){
+                return {op:x.opCode,offset:index,operands:x.args,address:"0x"+Number(index).toString(16)}
+            });
+        }
+    };
 
     p5.setup = function(){
         console.log(p5);
@@ -28,7 +40,6 @@ export default function sketch(p5){
         canvas = p5.createCanvas(p5.windowWidth, 0.5*p5.windowWidth)
         console.log(canvas);
         p5.textFont(p5.DataFont);
-
         let siiiize = p5.width*0.2;
 
 
@@ -36,8 +47,8 @@ export default function sketch(p5){
             p5,
             p5.width*0.015,
             p5.width*0.015,
-            p5.width*0.2
-
+            p5.width*0.2,
+            visualInstrArray
         );
         /*ram =  new RAM(p5,p5.width*0.72 ,20,siiiize,2**8);
         registers = new Registers(p5,70,20,siiiize);
@@ -54,7 +65,6 @@ export default function sketch(p5){
     let dir = 1;
 
     p5.draw = function() {
-
         executionUnit.cpuCycle();
         /*
 
@@ -77,6 +87,7 @@ export default function sketch(p5){
 
     p5.mouseClicked = function() {
         //console.log(p5.mouseX, p5.mouseY);
+        if(executionUnit)
         executionUnit.onClick(p5.mouseX, p5.mouseY);
     };
 

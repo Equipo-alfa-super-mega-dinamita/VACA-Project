@@ -1,3 +1,4 @@
+;Programa para calcular el término i-ésimo de la sucesión de fibonacci
 MOV CX, 10     ;Termino décimo de la suceción de fibonacci
 MOV AX, 0;
 MOV BX, 1;
@@ -8,3 +9,4 @@ MOV AX, DX
 LOOP lbl
 MOV DX BX       ;Respuesta estará en DX
 HLT
+

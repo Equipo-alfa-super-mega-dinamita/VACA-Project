@@ -31,10 +31,13 @@ class CodeExecutor {
     memoryPos = 0;
     execute = true;
     codeArray;
+    processed = [];
+    procInstr;
 
     constructor(state) {
         this.labelContents = state.labelContents;
         this.ramContent = state.ramContent.memoryContent;
+        this.buffer     = state.ramContent.buffer;
         this.memoryPos = state.memoryPos;
         this.codeArray = state.codeArray;
         this.SRegisters = {
@@ -70,12 +73,85 @@ class CodeExecutor {
     start() {
         while (this.execute && this.registers.IP < this.SRegisters.DS) {
             let instruction = this.codeArray[this.registers.IP];
-            //todo ejecutar instruccion
+            let procState = this.buildState();
             this.execInstruction(instruction);
+            let procInstr = this.buildInstr(instruction);
             console.log(instruction.instrText);
             console.log(this.registers);
             console.log(this.ramContent)
+            this.processed.push({state: procState,instruction:procInstr});
         }
+        return this.processed;
+    }
+
+    doInstr(){
+        let instruction = null;
+        let procState = null;
+        this.procInstr = null;
+        if(this.execute && this.registers.IP < this.SRegisters.DS){
+            instruction = this.codeArray[this.registers.IP];
+            procState = this.buildState();
+            this.execInstruction(instruction);
+            let procInstr = this.buildInstr(instruction);
+            console.log(instruction.instrText);
+            //console.log(this.registers);
+            //console.log(this.ramContent)
+            this.processed.push({state: procState,instruction:procInstr});
+        }
+        return {state: procState,instruction:this.procInstr}
+    }
+
+    buildInstr(instruction){
+        return instruction.instrText;
+    }
+
+    buildState(){
+        let st = {
+            Registers: {
+                flags: {
+                    control : {
+                        TF:this.flags.TF,
+                        DF:this.flags.DF,
+                        IF:this.flags.IF,
+                    },
+                    status : {
+                        OF: this.flags.OF,
+                        SF: this.flags.SF,
+                        ZF: this.flags.ZF,
+                        AF: this.flags.AF,
+                        PF: this.flags.PF,
+                        CF: this.flags.CF,
+                    }
+                },
+                registers: {
+                    general:{
+                        AX:this.registers.AX,
+                        BX:this.registers.BX,
+                        CX:this.registers.CX,
+                        DX:this.registers.DX,
+                    },
+                    pointer:{
+                        SP:this.registers.SP,
+                        BP:this.registers.BP,
+                    },
+                    index:{
+                        SI:this.registers.SI,
+                        DI:this.registers.DI,
+                    },
+                    segment:{
+                        CS:this.SRegisters.CS,
+                        ES:this.SRegisters.ES,
+                        DS:this.SRegisters.DS,
+                        SS:this.SRegisters.SS,
+                    },
+                    instruction:{
+                        IP:this.registers.IP,
+                    },
+                }
+            },
+            memory: new Uint8Array(this.buffer.slice(0))
+        };
+        return st;
     }
 
     setReg(value, reg) {
@@ -449,7 +525,7 @@ class CodeExecutor {
                         break;
 
                     case "memory":
-                        this.ramContent[this.getLogMemoryDir(args[0])] = addResult;
+                        this.ramContent[this.getLogMemoryDir(args[0])] = subResult;
                         break;
                 }
                 this.registers.IP++;

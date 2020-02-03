@@ -9,3 +9,4 @@ MOV AX, [SI]    ;Tomar el numero de 16 bits de memoria a AX
 DIV BL          ;Dividir AL entre BL
 MOV [DI], AX    ;Guardar el resultado de 16 bits en memoria
 HLT             ;Terminar el programa
+

@@ -1,8 +1,12 @@
-MOV CX, [0500]
+;Programa para el calcular factorial de un numero
+MOV CX, 5
+MOV BX, CX
 MOV AX, 0001
 MOV DX, 0000
-dir:MUL CX
+dir:MUL BX
+DEC BX
 LOOP dir
 MOV [0600], AX
 MOV [0601], DX
 HLT
+
