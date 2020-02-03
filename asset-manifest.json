@@ -1,21 +1,22 @@
 {
   "files": {
     "main.css": "/VACA-Project/static/css/main.b100e6da.chunk.css",
-    "main.js": "/VACA-Project/static/js/main.0303aa5b.chunk.js",
-    "main.js.map": "/VACA-Project/static/js/main.0303aa5b.chunk.js.map",
+    "main.js": "/VACA-Project/static/js/main.1dc81497.chunk.js",
+    "main.js.map": "/VACA-Project/static/js/main.1dc81497.chunk.js.map",
     "runtime-main.js": "/VACA-Project/static/js/runtime-main.572d41b7.js",
     "runtime-main.js.map": "/VACA-Project/static/js/runtime-main.572d41b7.js.map",
-    "static/js/2.0a517f5b.chunk.js": "/VACA-Project/static/js/2.0a517f5b.chunk.js",
-    "static/js/2.0a517f5b.chunk.js.map": "/VACA-Project/static/js/2.0a517f5b.chunk.js.map",
+    "static/js/2.694dec0b.chunk.js": "/VACA-Project/static/js/2.694dec0b.chunk.js",
+    "static/js/2.694dec0b.chunk.js.map": "/VACA-Project/static/js/2.694dec0b.chunk.js.map",
     "index.html": "/VACA-Project/index.html",
-    "precache-manifest.7c2d66a762ae8235aac8002c23ae5a9d.js": "/VACA-Project/precache-manifest.7c2d66a762ae8235aac8002c23ae5a9d.js",
+    "precache-manifest.9b9d143a351dad830c334bb41809398a.js": "/VACA-Project/precache-manifest.9b9d143a351dad830c334bb41809398a.js",
     "service-worker.js": "/VACA-Project/service-worker.js",
-    "static/css/main.b100e6da.chunk.css.map": "/VACA-Project/static/css/main.b100e6da.chunk.css.map"
+    "static/css/main.b100e6da.chunk.css.map": "/VACA-Project/static/css/main.b100e6da.chunk.css.map",
+    "static/media/Logo.png": "/VACA-Project/static/media/Logo.e90514ff.png"
   },
   "entrypoints": [
     "static/js/runtime-main.572d41b7.js",
-    "static/js/2.0a517f5b.chunk.js",
+    "static/js/2.694dec0b.chunk.js",
     "static/css/main.b100e6da.chunk.css",
-    "static/js/main.0303aa5b.chunk.js"
+    "static/js/main.1dc81497.chunk.js"
   ]
 }
