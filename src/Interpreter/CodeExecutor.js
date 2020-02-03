@@ -170,13 +170,22 @@ class CodeExecutor {
 
     splitNumber(number) {
         let lsb = (number & 0xFF), msb = (number >> 8) & 0xff;
-        return [msb , lsb];
+        return [msb, lsb];
     }
 
     rebuildNumber(block1, block2) {
         let ans = block2 << 8;
         ans += block1;
         return ans;
+    }
+
+    rebuildNumber16(block1, block2) {
+        let ans = block2 << 16;
+        ans += block1;
+        return ans;
+    }
+    stringBitsNum(num){
+        return (num).toString(2).padStart(8,'0');
     }
 
 
@@ -251,7 +260,7 @@ class CodeExecutor {
     execInstruction(instr) {
         //little endian: primero menos y luego más
         let args = instr.args;
-        let [msb , lsb] = [-1,-1];
+        let [msb, lsb] = [-1, -1];
         switch (instr.opCode) {
             case "MOV":
                 let arg1 = instr.args[0];
@@ -278,7 +287,7 @@ class CodeExecutor {
                 this.registers.SP += 1;
                 if (args[0].type === "register") {
                     let myVarAux = this.getRawVal(args[0]);
-                    [msb , lsb] = this.splitNumber(myVarAux);
+                    [msb, lsb] = this.splitNumber(myVarAux);
                     this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] = msb;
                     this.registers.SP += 1;
                     this.ramContent[this.getLogMemoryDir({value: "SP", valueType: "pointer"})] = lsb;
@@ -305,9 +314,8 @@ class CodeExecutor {
                 if (args[0].type === "register") {
                     this.setReg(this.rebuildNumber(block1, block2), args[0].value);
                 } else if (args[0].type === "memory") {
-                    //TODO Tener en cuenta que debería estar ordenado por parejas
-                    //Debo meter la pareja? Si es así, Que pasa si me dan la direccion del final de la pareja?
-
+                    this.ramContent[this.getLogMemoryDir(args[0])] = block1;
+                    this.ramContent[this.getLogMemoryDir(args[0]) + 1] = block2;
                 } else {
                     //TODO Error generator
                 }
@@ -315,7 +323,19 @@ class CodeExecutor {
                 break;
 
             case "DIV":
+                let myVarAux = this.getRawVal(args[0]);
+                if (myVarAux < 256) {
+                    //byte
+                    lsb = Math.abs(this.getReg("AX") / this.getRawVal(args[0])>>0); //AL
+                    msb = Math.abs(this.getReg("AX") % this.getRawVal(args[0])); //AH
+                    this.setReg(this.rebuildNumber(lsb,msb), "AX");
 
+                } else {
+                    //word
+                    let num = this.rebuildNumber16(this.getReg("AX"), this.getReg("DX"));
+                    this.setReg(Math.abs(num / this.getRawVal(args[0])>>0), "AX");
+                    this.setReg(Math.abs(num % this.getRawVal(args[0])), "DX");
+                }
                 this.registers.IP++;
                 break;
             case "INC":
